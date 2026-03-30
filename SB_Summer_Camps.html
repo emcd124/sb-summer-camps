@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>South Bend Summer Camps</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sun: #F5A623;
+    --sky: #4A90D9;
+    --grass: #2D7A4F;
+    --coral: #E85D4A;
+    --lavender: #8B6FBE;
+    --sand: #FBF6EF;
+    --ink: #1C1C1E;
+    --muted: #6B7280;
+    --border: #E5DDD3;
+    --card: #FFFFFF;
+    --theme-nature: #2D7A4F;
+    --theme-arts: #E85D4A;
+    --theme-sport: #4A90D9;
+    --theme-science: #8B6FBE;
+    --theme-general: #F5A623;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--sand);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--sky);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--sun);
+  }
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+  }
+  .logo span { color: var(--sun); }
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .data-source-badge {
+    font-size: 11px;
+    color: rgba(255,255,255,0.85);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #4ade80;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .total-count {
+    font-size: 13px;
+    color: #fff;
+    font-weight: 500;
+  }
+
+  /* WEEK TRACKER */
+  .week-tracker {
+    background: #2E6FA8;
+    padding: 16px 32px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+  .tracker-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.9);
+    padding-bottom: 10px;
+    font-weight: 600;
+  }
+  .tracker-grid {
+    display: grid;
+    grid-template-columns: 90px repeat(11, 1fr);
+    gap: 3px;
+  }
+  .tracker-row {
+    display: contents;
+  }
+  .tracker-cell {
+    background: rgba(255,255,255,0.12);
+    border-radius: 4px;
+    padding: 6px 4px;
+    text-align: center;
+    font-size: 11px;
+    transition: background 0.2s;
+  }
+  .tracker-cell.header-cell {
+    background: transparent;
+    font-size: 10px;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .tracker-cell.row-label {
+    background: transparent;
+    text-align: left;
+    padding-left: 0;
+    color: rgba(255,255,255,0.8);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    display: flex;
+    align-items: center;
+  }
+  .tracker-cell.hearted-cell {
+    background: rgba(255,255,255,0.15);
+    color: #FFE680;
+    font-weight: 700;
+  }
+  .tracker-cell.hearted-cell.has-camps { background: rgba(255,255,255,0.25); }
+  .tracker-cell.total-cell {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.9);
+    font-weight: 500;
+  }
+  .tracker-cell.filtered-cell {
+    background: rgba(255,255,255,0.12);
+    color: #FFE680;
+    font-weight: 600;
+  }
+  .tracker-cell.filtered-cell.active { background: rgba(255,255,255,0.28); }
+
+  /* LAYOUT */
+  .app-body {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 0;
+    min-height: calc(100vh - 120px);
+  }
+
+  /* SIDEBAR */
+  aside {
+    background: #fff;
+    border-right: 2px solid #BFDBFE;
+    padding: 24px 20px;
+    position: sticky;
+    top: 120px;
+    height: calc(100vh - 120px);
+    overflow-y: auto;
+  }
+  .filter-section {
+    margin-bottom: 28px;
+  }
+  .filter-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .chip {
+    padding: 5px 11px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    color: var(--ink);
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .chip:hover { border-color: var(--ink); }
+  .chip.active { border-color: transparent; color: #fff; }
+  .chip.theme-nature.active { background: var(--theme-nature); }
+  .chip.theme-arts.active { background: var(--theme-arts); }
+  .chip.theme-sport.active { background: var(--theme-sport); }
+  .chip.theme-science.active { background: var(--theme-science); }
+  .chip.theme-general.active { background: var(--theme-general); }
+  .chip.type-full.active { background: var(--ink); }
+  .chip.type-half.active { background: var(--ink); }
+  .chip.type-part.active { background: var(--ink); }
+  .chip.default-active.active { background: var(--ink); }
+
+  .age-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+  }
+  .age-chip {
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    color: var(--ink);
+    transition: all 0.15s;
+    text-align: center;
+    user-select: none;
+    line-height: 1.3;
+  }
+  .age-chip:hover { border-color: var(--sky); }
+  .age-chip.active { background: var(--sky); border-color: var(--sky); color: #fff; }
+
+  .week-chips {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+  }
+  .week-chip {
+    padding: 6px 4px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    color: var(--ink);
+    transition: all 0.15s;
+    text-align: center;
+    user-select: none;
+    line-height: 1.3;
+  }
+  .week-chip:hover { border-color: var(--sun); }
+  .week-chip.active { background: var(--sun); border-color: var(--sun); color: #fff; }
+
+  .clear-btn {
+    width: 100%;
+    padding: 9px;
+    background: var(--sand);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+    margin-top: 4px;
+  }
+  .clear-btn:hover { background: var(--sky); color: #fff; border-color: var(--sky); }
+
+  .search-wrap {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  .search-input {
+    width: 100%;
+    padding: 9px 12px 9px 34px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    background: #fff;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-input:focus { border-color: var(--sky); }
+  .search-icon {
+    position: absolute;
+    left: 10px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 14px;
+    pointer-events: none;
+  }
+
+  .favorites-toggle {
+    width: 100%;
+    padding: 9px;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .favorites-toggle.active { background: #FFF0ED; border-color: var(--coral); color: var(--coral); }
+  .favorites-toggle:hover { border-color: var(--coral); }
+
+  /* MAIN CONTENT */
+  main {
+    padding: 24px 28px;
+  }
+  .results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .results-count {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .results-count span { color: var(--muted); font-weight: 300; font-size: 18px; }
+  .sort-select {
+    padding: 7px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    background: #fff;
+    color: var(--ink);
+    outline: none;
+    cursor: pointer;
+  }
+
+  /* CAMP CARDS */
+  .camps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .camp-card {
+    background: var(--card);
+    border-radius: 12px;
+    border: 1.5px solid var(--border);
+    padding: 18px;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .camp-card:hover {
+    border-color: #ccc;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+  }
+  .camp-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .camp-card.theme-nature::before { background: var(--theme-nature); }
+  .camp-card.theme-arts::before { background: var(--theme-arts); }
+  .camp-card.theme-sport::before { background: var(--theme-sport); }
+  .camp-card.theme-science::before { background: var(--theme-science); }
+  .camp-card.theme-general::before { background: var(--theme-general); }
+  .camp-card.multi-theme::before { background: linear-gradient(90deg, var(--theme-nature), var(--theme-arts), var(--theme-sport)); }
+  .camp-card.hearted { border-color: var(--coral); }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .camp-name {
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+    flex: 1;
+  }
+  .heart-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+    padding: 2px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .heart-btn:hover { transform: scale(1.2); }
+  .heart-btn.hearted { animation: heartPop 0.3s ease; }
+  @keyframes heartPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+    100% { transform: scale(1); }
+  }
+
+  .theme-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+  .theme-tag {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    color: #fff;
+  }
+  .theme-tag.nature { background: var(--theme-nature); }
+  .theme-tag.arts { background: var(--theme-arts); }
+  .theme-tag.sport { background: var(--theme-sport); }
+  .theme-tag.science { background: var(--theme-science); }
+  .theme-tag.general { background: var(--theme-general); }
+  .type-tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: var(--sand);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  .camp-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .meta-item {
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    line-height: 1.4;
+  }
+  .meta-icon { flex-shrink: 0; margin-top: 1px; }
+
+  .week-dots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-bottom: 10px;
+  }
+  .week-dot {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 3px 6px;
+    border-radius: 4px;
+    background: var(--sand);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    letter-spacing: 0.3px;
+  }
+  .week-dot.matched { background: #EFF6FF; color: var(--sky); border-color: #BFDBFE; }
+
+  .ages-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-bottom: 12px;
+  }
+  .age-dot {
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: var(--sand);
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .cost-badge {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--grass);
+    font-family: 'Fraunces', serif;
+  }
+  .website-link {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sky);
+    text-decoration: none;
+    padding: 4px 10px;
+    border: 1.5px solid #BFDBFE;
+    border-radius: 6px;
+    transition: all 0.15s;
+    background: #EFF6FF;
+  }
+  .website-link:hover { background: var(--sky); color: #fff; border-color: var(--sky); }
+
+  .no-results {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+  }
+  .no-results-emoji { font-size: 48px; display: block; margin-bottom: 12px; }
+  .no-results h3 { font-family: 'Fraunces', serif; font-size: 22px; margin-bottom: 8px; color: var(--ink); }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    .app-body { grid-template-columns: 1fr; }
+    aside { position: static; height: auto; }
+    header { padding: 16px 20px; }
+    .week-tracker { display: none; }
+  }
+
+  .loading { text-align: center; padding: 60px; color: var(--muted); font-family: 'Fraunces', serif; font-size: 18px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">☀️ South Bend <span>Summer Camps</span></div>
+  <div class="header-meta">
+    <div class="data-source-badge">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="dataSourceLabel">Loading data…</span>
+    </div>
+    <div class="total-count" id="headerCount"></div>
+  </div>
+</header>
+
+<div class="week-tracker">
+  <div class="tracker-label">Week-by-Week Overview</div>
+  <div class="tracker-grid" id="trackerGrid"></div>
+</div>
+
+<div class="app-body">
+  <aside>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" type="text" placeholder="Search camps…" id="searchInput">
+    </div>
+
+    <button class="favorites-toggle" id="favToggle" onclick="toggleFavoritesFilter()">♡ Show favorites only</button>
+
+    <div class="filter-section">
+      <div class="filter-title">Theme</div>
+      <div class="filter-chips">
+        <div class="chip theme-nature" data-filter="theme" data-value="Nature" onclick="toggleFilter(this)">🌿 Nature</div>
+        <div class="chip theme-arts" data-filter="theme" data-value="Arts" onclick="toggleFilter(this)">🎨 Arts</div>
+        <div class="chip theme-sport" data-filter="theme" data-value="Sport" onclick="toggleFilter(this)">⚽ Sport</div>
+        <div class="chip theme-science" data-filter="theme" data-value="Science" onclick="toggleFilter(this)">🔬 Science</div>
+        <div class="chip theme-general" data-filter="theme" data-value="General" onclick="toggleFilter(this)">🌟 General</div>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">Day Type</div>
+      <div class="filter-chips">
+        <div class="chip type-full default-active" data-filter="dayType" data-value="Full" onclick="toggleFilter(this)">Full Day</div>
+        <div class="chip type-half default-active" data-filter="dayType" data-value="Half" onclick="toggleFilter(this)">Half Day</div>
+        <div class="chip type-part default-active" data-filter="dayType" data-value="Part" onclick="toggleFilter(this)">Part Day</div>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">Age / Grade</div>
+      <div class="age-grid" id="ageGrid"></div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">Week</div>
+      <div class="week-chips" id="weekChips"></div>
+    </div>
+
+    <button class="clear-btn" onclick="clearFilters()">✕ Clear all filters</button>
+  </aside>
+
+  <main>
+    <div class="results-header">
+      <div class="results-count" id="resultsCount">Loading…</div>
+      <select class="sort-select" id="sortSelect" onchange="renderCamps()">
+        <option value="name">Sort: A–Z</option>
+        <option value="cost">Sort: Cost</option>
+        <option value="hearted">Sort: Favorites first</option>
+      </select>
+    </div>
+    <div class="camps-grid" id="campsGrid">
+      <div class="loading">Loading camps…</div>
+    </div>
+  </main>
+</div>
+
+<script>
+const GOOGLE_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vToDTtPRso-6Z8NiN1VAwfm0mZ4Gyf0gQfYAA2ZsJ8ViSMoyQ7fvQft1f5C3WB3FtCgrRU8-e3Lv3tc/pub?output=csv';
+
+const AGE_LABELS = ['3 YR','4 YR','K/5 YR','1st/6 YR','2nd/7 YR','3rd/8 YR','4th/9 YR','5th/10 YR','6th/11 YR','7th/12 YR','8th/13 YR','HS/14+'];
+
+// Embedded fallback data
+const FALLBACK = {"weeks":["Jun 2","Jun 9","Jun 16","Jun 23","Jun 30","Jul 7","Jul 14","Jul 21","Jul 28","Aug 4","Aug 11"],"camps":[{"name":"Bertrand Farms @GSMS M-TH","weeks":[5,6,7,8],"dayType":["Full","Half"],"themes":["Nature"],"ages":[1,2,3,4,5,6,7,8,9,10,11],"cost":"$100-120","times":"9-11:30/12:00","agesText":"4-14 YR","website":"http://bertrandfarm.org/programs/farm-camp/"},{"name":"Bethel College, Summer Coding Camp","weeks":[0,1],"dayType":["Half"],"themes":[],"ages":[7,8,9,10,11],"cost":"$60","times":"9-12pm","agesText":"10-14YR","website":"https://engage.bethelks.edu/portal/coding-camps"},{"name":"Bethel College, various (engineering, science, art, music, theater)","weeks":[5,6],"dayType":["Half"],"themes":["Arts","Science"],"ages":[6,7,8,9,10,11],"cost":"$110","times":"9-12:00","agesText":"9+ YR","website":"https://www.bethelcollege.edu/Camps"},{"name":"Bethel College, various sports","weeks":[0,1,3,5,6],"dayType":["Full","Half"],"themes":["Sport"],"ages":[5,6,7,8,9,10,11],"cost":"$110-320","times":"varies","agesText":"8+","website":"http://www.bethelcollegepilots.com/BethelSportsCamps#Schedule"},{"name":"Camp Awareness SB parks","weeks":[1,2,3,4,5,6,7,8],"dayType":["Full"],"themes":["General"],"ages":[5,6,7,8,9,10,11],"cost":"$175","times":"9-4:00","agesText":"8+ YR","website":"http://sbpark.org/activities/camps/camp-awareness/"},{"name":"Camp Ideal","weeks":[3,4,5,6,7,8],"dayType":["Full"],"themes":["General"],"ages":[1,2,3,4,5,6,7,8,9,10],"cost":"$130","times":"check website","agesText":"K-7th","website":"https://www.thejewishfed.org/programs/camp-ideal"},{"name":"Camp Invention - Ethos","weeks":[3],"dayType":["Full"],"themes":["Science"],"ages":[2,3,4,5,6,7,8],"cost":"$230","times":"9-3:30","agesText":"entering 1-6th GR","website":"https://inventnow-web.ungerboeck.com/programsearch/moreinfo.aspx?event=23016"},{"name":"Camp Invention - Northpoint Elementary","weeks":[3],"dayType":["Full"],"themes":["Science"],"ages":[2,3,4,5,6,7,8],"cost":"$235","times":"9-3:30","agesText":"entering 1-6th GR","website":"https://inventnow-web.ungerboeck.com/programsearch/moreinfo.aspx?event=23023"},{"name":"Civic Theater","weeks":[1,2,3,5,6,7,8],"dayType":["Full","Half"],"themes":["Arts"],"ages":[5,6,7,8,9,10,11],"cost":"$135-225/wk","times":"9:00-3:30","agesText":"3-12 GR","website":"https://drive.google.com/file/d/11KnJEYDbnf_fyzSTyNAN-FgfBnn1jRXj/view"},{"name":"Dunes Discovery Camp (overnight)","weeks":[3,6,7],"dayType":["Full"],"themes":["Nature"],"ages":[6,7,8,9,10],"cost":"$479","times":"overnight (5 day 4 night)","agesText":"9-13 YR","website":"https://duneslearningcenter.org/summer/"},{"name":"Ethos Science Center (Elkhart)","weeks":[1,2,3,5,6],"dayType":["Full","Half"],"themes":["Science"],"ages":[1,2,3,4,5,6,7,8,9,10,11],"cost":"$190","times":"9-3:30","agesText":"4 YRS - 8 GR","website":"https://www.ethosinc.org/summer-camp.html"},{"name":"Fernwood Summer Camp","weeks":[1,2,3,5,6,7,8,9],"dayType":["Full","Half"],"themes":["Nature"],"ages":[1,2,3,4,5,6,7,8,9],"cost":"$81-152","times":"9:30-varies","agesText":"4-12 YR","website":"http://www.fernwoodbotanical.org/education/summer-day-camps-for-children.html"},{"name":"Garden Camp @Unity Gardens","weeks":[3,6],"dayType":["Full"],"themes":["Nature"],"ages":[2,3,4,5,6,7,8,9,10,11],"cost":"FREE!","times":"9am-3PM","agesText":"5-15 YR","website":"https://www.theunitygardens.org/kids-camp.html"},{"name":"Heartland Art Gallery (2-3 day)","weeks":[1],"dayType":["Part"],"themes":["Arts"],"ages":[3,4,5,6,7,8,9,10],"cost":"$15-20","times":"10:00-12:00","agesText":"6-13 YR","website":"http://heartlandartgallery.com/2019-kids-classes/"},{"name":"Heatherwood Horse Camp","weeks":[0,1,2,3,5,6],"dayType":["Full"],"themes":["Sport"],"ages":[2,3,4,5,6,7,8,9,10,11],"cost":"$480/week","times":"8:30-3pm","agesText":"5-16 YRS","website":""},{"name":"Irish Softball Advanced Camp","weeks":[5],"dayType":["Part"],"themes":["Sport"],"ages":[8,9,10,11],"cost":"$565","times":"10:00-5:00","agesText":"11-18","website":"http://www.und.com/sports/camps/nd-camps-body.html"},{"name":"JINA art to science (ND)","weeks":[5,6],"dayType":["Full"],"themes":["Arts","Science"],"ages":[5,6,7,8,9],"cost":"$150-200","times":"9-5:00","agesText":"8-12 YR","website":"http://www.jinaweb.org/outreach/artCamp/"},{"name":"KOA Princess Way Summer Day Camp","weeks":[1,2,3,4,5,6,7,8,9,10],"dayType":["Full"],"themes":["General"],"ages":[3,4,5,6,7,8,9,10,11],"cost":"$78-134","times":"7AM-6PM","agesText":"6-16","website":"http://elkhartkoa.com/princess-way-day-camp/"},{"name":"Kroc Adventure Camp","weeks":[5,7],"dayType":["Full"],"themes":["Nature"],"ages":[5,6,7,8,9,10],"cost":"$200","times":"9-5:00","agesText":"8-13 YR","website":"http://www.mykroc.org/specialty-camps.html#adventurecamp"},{"name":"Kroc General Weekly Camps","weeks":[1,2,3,4,5,6,7,8,9,10],"dayType":["Full"],"themes":["General"],"ages":[0,1,2,3,4,5,6,7,8,9,10,11],"cost":"$130","times":"7-6:00","agesText":"3-17 YR","website":"https://mykroc.org/kroc-summer-camp"},{"name":"Kroc Geocache","weeks":[6],"dayType":["Full"],"themes":["Nature"],"ages":[5,6,7,8,9,10],"cost":"$90","times":"9-5:00","agesText":"8-13 YR","website":"http://www.mykroc.org/specialty-camps.html#geocachecamp"},{"name":"Kroc Little Pine Island Overnight","weeks":[2,4,5,6],"dayType":["Full"],"themes":["General","Nature","Sport","Science"],"ages":[3,4,5,6,7,8,9,10,11],"cost":"$50","times":"overnight","agesText":"6-17 YR","website":"http://www.mykroc.org/specialty-camps.html#littlepine"},{"name":"Kroc Sports Camps","weeks":[1,3,6,8],"dayType":["Half"],"themes":["Sport"],"ages":[4,5,6,7,8,9,10,11],"cost":"$50","times":"10-2:00","agesText":"7-14 YR","website":"http://www.mykroc.org/specialty-camps.html#sportscamp"},{"name":"Kroc Youth Theater Camp","weeks":[3],"dayType":["Half"],"themes":["Arts"],"ages":[3,4,5,6,7,8,9,10,11],"cost":"$110","times":"10-3:00","agesText":"6-15 YR","website":"http://www.mykroc.org/specialty-camps.html#theatrecamp"},{"name":"Leeper Park Tennis Camps","weeks":[1,2,3,5,6,7],"dayType":["Full"],"themes":["Sport"],"ages":[2,3,4,5,6,7,8,9,10,11],"cost":"$150","times":"9am-4pm","agesText":"5-14 YR","website":"http://sbvpa.org/things-to-do/tennis-camps/"},{"name":"Martin's Kids Cooking School","weeks":[],"dayType":["Half"],"themes":["Arts"],"ages":[7,8,9,10,11],"cost":"$140","times":"9:30-11:30","agesText":"5th GR+","website":"https://www.martinsgroceriestogo.com/school-of-cooking"},{"name":"Meijer Baseball Academy","weeks":[5,7],"dayType":["Half"],"themes":["Sport"],"ages":[3,4,5,6,7,8,9],"cost":"$125","times":"8:30-12","agesText":"6-12 YR","website":""},{"name":"Mishawaka Parks & Rec Adventure Day Camps","weeks":[1,2,3,4,5,6,7,8,9],"dayType":["Full"],"themes":["General"],"ages":[1,2,3,4,5,6,7,8,9],"cost":"$100+$25 reg","times":"8-3:00","agesText":"4-12 YR","website":"http://mishawaka.in.gov/parks/activities/day-camps"},{"name":"Montessori Academy Drama Camp","weeks":[6,7],"dayType":["Half"],"themes":["Arts"],"ages":[6,7,8,9,10,11],"cost":"$125-200","times":"12:30-3:30","agesText":"4-8 GR","website":"http://www.tma-el.org/academic-programs/summer-camps-and-programs.cfm"},{"name":"Montessori Academy (various)","weeks":[2,3],"dayType":["Half"],"themes":["Arts"],"ages":[3,4,5,6,7,8,9,10,11],"cost":"$130","times":"8:30-11:30","agesText":"1-8 GR","website":"https://www.tmael.org/summer-camps.html"},{"name":"Montessori Academy art camp","weeks":[2,3],"dayType":["Full"],"themes":["Arts"],"ages":[3,4,5,6,7,8,9,10,11],"cost":"$175/wk","times":"9-3:15","agesText":"1-8 GR","website":"https://www.tmael.org/summer-camps.html"},{"name":"Nature Detective Camp @ Rum Village","weeks":[6],"dayType":["Full"],"themes":["Nature"],"ages":[8,9],"cost":"$105","times":"9-2:30","agesText":"11-12 YR","website":"http://sbpark.org/activities/camps/nature-detectives/"},{"name":"ND Boys Baseball Day Camp","weeks":[1,2],"dayType":["Full"],"themes":["Sport"],"ages":[3,4,5,6,7,8],"cost":"$250","times":"see website","agesText":"6-11","website":"http://www.und.com/sports/camps/nd-camps-body.html"},{"name":"ND Center for Arts & Culture","weeks":[2,3,5,6],"dayType":["Half"],"themes":["Arts"],"ages":[8,9,10],"cost":"$50","times":"9-12:00","agesText":"6-9 GR","website":"http://artsandculture.nd.edu/educational-programs/summer-camp/"},{"name":"ND DNA Camps & Workshop","weeks":[3,4,5,6],"dayType":["Half","Part"],"themes":["Science"],"ages":[8,9,10,11],"cost":"$65-635","times":"varies","agesText":"6-8 GR","website":"https://dnacenter.nd.edu/summer-camps/"},{"name":"ND Girls Soccer Advanced Camp","weeks":[1],"dayType":["Full"],"themes":["Sport"],"ages":[7,8,9,10,11],"cost":"$550","times":"see website","agesText":"5th-8th grade","website":"http://www.und.com/sports/camps/nd-camps-body.html"},{"name":"ND Irish Hockey Day Camp","weeks":[5],"dayType":["Full"],"themes":["Sport"],"ages":[4,5,6,7,8,9,10,11],"cost":"$450","times":"see website","agesText":"7-14","website":"http://www.und.com/sports/camps/nd-camps-body.html"},{"name":"ND Men's Soccer Co-Ed Day Camp","weeks":[5,6],"dayType":["Half"],"themes":["Sport"],"ages":[3,4,5,6,7,8,9],"cost":"$170","times":"see website","agesText":"1st-6th grade","website":"http://www.und.com/sports/camps/nd-camps-body.html"},{"name":"ND Men's Golf Camp","weeks":[3],"dayType":["Full"],"themes":["Sport"],"ages":[8,9,10,11],"cost":"$1,200","times":"see website","agesText":"11-17","website":"http://www.und.com/sports/camps/nd-camps-body.html"},{"name":"ND Softball Multi Skill Camp","weeks":[2],"dayType":["Half"],"themes":["Sport"],"ages":[2,3,4,5,6,7,8],"cost":"$250","times":"9:00-1:00","agesText":"5-11","website":"http://www.und.com/sports/camps/nd-camps-body.html"},{"name":"ND STEM Summer Camps","weeks":[5,6],"dayType":["Half"],"themes":[],"ages":[8,9,10],"cost":"$100","times":"8-11:30am","agesText":"entering 6-8th","website":"https://stemeducation.nd.edu/stem-summer-camps"},{"name":"ND Swimming Camp","weeks":[2,3],"dayType":["Full"],"themes":["Sport"],"ages":[6,7,8,9,10,11],"cost":"$600","times":"see website","agesText":"9-17","website":"http://www.und.com/sports/camps/nd-camps-body.html"},{"name":"ND Tennis Camp","weeks":[1],"dayType":["Full"],"themes":["Sport"],"ages":[6,7,8,9,10,11],"cost":"$645","times":"see website","agesText":"9-18","website":"http://www.und.com/sports/camps/nd-camps-body.html"},{"name":"ND Tennis National Camp","weeks":[2,3],"dayType":["Full"],"themes":["Sport"],"ages":[6,7,8,9,10,11],"cost":"$695","times":"see website","agesText":"9-18","website":"http://www.und.com/sports/camps/nd-camps-body.html"},{"name":"Notre Dame Golf Camp @Burke","weeks":[2,5,7],"dayType":[],"themes":["Sport"],"ages":[2,3,4,5,6,7,8,9,10,11],"cost":"$150","times":"9-11am","agesText":"5-15 yrs","website":""},{"name":"Penn HS Robotics Camps","weeks":[1,2],"dayType":["Part"],"themes":["Science"],"ages":[3,4,5,6,7,8,9,10,11],"cost":"$83-103","times":"part day, varies","agesText":"1-8 GR","website":"http://team135.org/summercamp/"},{"name":"Penn HS Sports Camps","weeks":[1,2,3,5,6,7],"dayType":["Half"],"themes":["Sport"],"ages":[2,3,4,5,6,7,8,9,10],"cost":"$40-70","times":"varies","agesText":"K-8","website":"https://penn.phmschools.org/penn-summer-camps"},{"name":"Potawatomi Zoo - Heroes (10-12 YR)","weeks":[2,6,9],"dayType":["Full"],"themes":["Nature","Science"],"ages":[7,8,9],"cost":"$200","times":"9-3pm","agesText":"10-12","website":"https://www.potawatomizoo.org/edzoocation/heroes-camp/"},{"name":"Prairie Winds Farms","weeks":[1,2,3,6,7,8,10],"dayType":["Full"],"themes":["Nature"],"ages":[0,1,2,3,4,5,6,7,8,9,10,11],"cost":"$175-300","times":"9am-2:30pm M-Th","agesText":"3+ YRS","website":"http://www.prairiewindsnaturefarm.com/"},{"name":"Saint Mary's Athletic Camps","weeks":[3,5,6,7],"dayType":["Full","Half"],"themes":["Sport"],"ages":[7,8,9,10,11],"cost":"$100-360","times":"8:00-12:00","agesText":"entering 4-12 GR","website":"http://events.saintmarys.edu/s/1611/index.aspx?sid=1611&gid=6&pgid=830"},{"name":"Skycamp @Skyzone","weeks":[3,6,8],"dayType":["Half"],"themes":["Sport"],"ages":[3,4,5,6,7,8,9],"cost":"$125","times":"8:45am-12:30pm","agesText":"6-12 YR","website":""},{"name":"South Bend Code School - 7-12 YRS","weeks":[2,3,4,5,6,7],"dayType":["Half"],"themes":["Science"],"ages":[4,5,6,7,8,9],"cost":"$150","times":"9-12:00","agesText":"7-12 YR","website":"https://southbendcodeschool.com/"},{"name":"South Bend Code School - Adventures in Scratch","weeks":[2,3,5,6],"dayType":["Half"],"themes":["Science"],"ages":[7,8,9],"cost":"$150","times":"9-12:00","agesText":"10-12 YR","website":"http://southbendcodeschool.com/courses.html"},{"name":"South Bend Code School - Adventures in Coding","weeks":[3,6],"dayType":["Half"],"themes":["Science"],"ages":[4,5,6],"cost":"$150","times":"9-12:00","agesText":"7-9 YR","website":"http://southbendcodeschool.com/courses.html"},{"name":"South Bend Code School - Dev with Unity","weeks":[2,3,4,5,6,7],"dayType":["Half"],"themes":["Science"],"ages":[10,11],"cost":"$400-750","times":"9-12 or 1-4","agesText":"13-18 YR","website":"http://southbendcodeschool.com/courses.html"},{"name":"South Bend Museum of Art","weeks":[1,2,3,6,7],"dayType":["Full","Half","Part"],"themes":["Arts"],"ages":[0,1,2,3,4,5,6,7,8,9,10,11],"cost":"$160-320","times":"9:30-11:30/12:30-2:30","agesText":"6-14 (also pre-k)","website":"https://southbendart.org"},{"name":"Southold Dance Art & Dance Camp","weeks":[1,2,6,7,8,9],"dayType":["Half"],"themes":["Arts"],"ages":[0,1,2,3,4,5,6,7,8],"cost":"$130-160","times":"see website","agesText":"3-11 YR","website":"http://southolddance.com"},{"name":"St Joe County Parks Outdoor Adventures","weeks":[5,6,7,8],"dayType":["Full","Half"],"themes":["Nature"],"ages":[2,3,4,5,6,7,8],"cost":"$65-90","times":"9-12:20 or 2:30","agesText":"5-11 YR","website":"http://www.sjcparks.org"},{"name":"St Joseph HS Camps","weeks":[0,1,2,3,5,6,7,8],"dayType":["Full","Half","Part"],"themes":["Sport"],"ages":[2,3,4,5,6,7,8,9,10,11],"cost":"$35-55","times":"varies","agesText":"K+","website":"https://www.saintjoehigh.com/campus-life/summer-programs"},{"name":"St Mary's Fine Arts Camp (Girls)","weeks":[5,6],"dayType":["Full"],"themes":["Arts"],"ages":[7,8,9,10,11],"cost":"$520-570","times":"6 day residential","agesText":"entering 5-9 GR","website":"http://events.saintmarys.edu/s/1611/index.aspx?sid=1611&gid=6&pgid=825"},{"name":"Stanley Clark (various programs)","weeks":[2,3,5,6,7,8],"dayType":["Full","Half"],"themes":["General","Arts","Sport","Science"],"ages":[0,1,2,3,4,5,6,7,8,9,10,11],"cost":"$205-369","times":"8:30-11:30/3:00","agesText":"3 Yr-K, 1-8 GR","website":"https://www.stanleyclark.org/academics/summer-school"},{"name":"Stanley Clark Kindergarten Reggio","weeks":[2,3,4,5,6,7],"dayType":["Full","Half"],"themes":["General"],"ages":[2],"cost":"$205-410","times":"8:30-11:30/3:00","agesText":"Kindergarten","website":"https://www.stanleyclark.org"},{"name":"Stanley Clark Preschool Reggio","weeks":[2,3,5,6,7,8],"dayType":["Full","Half"],"themes":["General"],"ages":[0,1,2],"cost":"$205-410","times":"8:30-11:30/3:00","agesText":"3-5 YR","website":"https://www.stanleyclark.org"},{"name":"STARBASE","weeks":[1,3],"dayType":["Half"],"themes":["Science"],"ages":[8,9,10],"cost":"FREE!","times":"9-2pm M-F","agesText":"5-8 GR","website":"https://www.starbasein.org/south-bend"},{"name":"STARBASE Advanced","weeks":[2],"dayType":[],"themes":["Science"],"ages":[9,10,11],"cost":"FREE!","times":"9-2 Mon-Fri","agesText":"6-9 GR","website":"https://www.starbasein.org/south-bend"},{"name":"Summer Camp Unleashed @Pet Refuge","weeks":[2,5,8],"dayType":["Full"],"themes":["Nature"],"ages":[7,8,9,10,11],"cost":"$150","times":"9am-3pm","agesText":"10-15 YR","website":"https://www.petrefuge.com/summer-camp-unleashed-registration"},{"name":"The Main Stage","weeks":[9],"dayType":["Half"],"themes":["Arts"],"ages":[2,3,4,5,6,7,8,9,10,11],"cost":"~$125","times":"9:30-12:30","agesText":"K-11","website":"https://themainstageinc.org/summer-camp"},{"name":"Trinity @Greenlawn Summer Classics","weeks":[2,3],"dayType":["Full"],"themes":["General"],"ages":[5,6,7,8],"cost":"$275","times":"9-2pm","agesText":"4-6 GR","website":"http://trinityschools.org/greenlawn/enrichment/for-younger-students/"},{"name":"Trinity @Greenlawn Young Explorers","weeks":[2],"dayType":["Half"],"themes":["Nature","Arts"],"ages":[3,4,5],"cost":"$150","times":"9-1pm","agesText":"1-3 GR","website":"http://trinityschools.org/greenlawn/enrichment/young-trinity-explorers/"},{"name":"United Youth Theater (2-week)","weeks":[2,3],"dayType":[],"themes":["Arts"],"ages":[2,3,4,5,6,7,8,9,10,11],"cost":"see website","times":"see website","agesText":"K-HS","website":"https://www.facebook.com/UnitedYouthTheatre"},{"name":"World Cup Soccer grades 1-8","weeks":[1,2],"dayType":["Full"],"themes":["Sport"],"ages":[3,4,5,6,7,8,9,10],"cost":"$145","times":"9-3:30","agesText":"1-8 GR","website":"https://soccerdaycamp.com/"},{"name":"World Cup Soccer grades 3-9","weeks":[2],"dayType":["Full"],"themes":["Sport"],"ages":[5,6,7,8,9,10,11],"cost":"$145","times":"9-3:30","agesText":"3-9 GR","website":"https://soccerdaycamp.com/"},{"name":"YMCA Camp Eberhart","weeks":[2,3,4,5,6,7,8,9,10],"dayType":["Full"],"themes":["General","Nature"],"ages":[1,2,3,4,5,6,7,8,9],"cost":"$190 day/$725 overnight","times":"8:30-4:30","agesText":"4-12 YR","website":"https://ymcacampeberhart.org/aboutsummerdaycamp/"},{"name":"YMCA Riverview - Camp Cooper","weeks":[1,2,3,4,5,6,7,8,9],"dayType":["Full"],"themes":["General"],"ages":[2,3,4,5,6,7,8,9,10],"cost":"$140-170/week","times":"6:30-6:00","agesText":"K-8 GR","website":"http://michianaymca.org"},{"name":"Youth Writing Camps","weeks":[1,2],"dayType":["Half"],"themes":["Arts"],"ages":[5,6,7,8,9,10,11],"cost":"$200","times":"9-noon","agesText":"3-8 GR","website":""},{"name":"Youth Writing Camps - Teen","weeks":[2,3],"dayType":["Full"],"themes":["Arts"],"ages":[8,9,10,11],"cost":"$200","times":"9-3pm","agesText":"6-12 GR","website":""}]};
+
+let campsData = FALLBACK;
+let hearts = JSON.parse(localStorage.getItem('sbCampHearts') || '[]');
+let filters = { themes: [], dayTypes: [], ages: [], weeks: [], search: '', favOnly: false };
+
+function saveHearts() { localStorage.setItem('sbCampHearts', JSON.stringify(hearts)); }
+function toggleHeart(name) {
+  const i = hearts.indexOf(name);
+  if (i === -1) hearts.push(name); else hearts.splice(i, 1);
+  saveHearts();
+  renderAll();
+}
+function isHearted(name) { return hearts.includes(name); }
+
+function toggleFilter(el) {
+  el.classList.toggle('active');
+  const f = el.dataset.filter, v = el.dataset.value;
+  if (f === 'theme') {
+    const i = filters.themes.indexOf(v);
+    if (i === -1) filters.themes.push(v); else filters.themes.splice(i, 1);
+  } else if (f === 'dayType') {
+    const i = filters.dayTypes.indexOf(v);
+    if (i === -1) filters.dayTypes.push(v); else filters.dayTypes.splice(i, 1);
+  } else if (f === 'age') {
+    const i = filters.ages.indexOf(+v);
+    if (i === -1) filters.ages.push(+v); else filters.ages.splice(i, 1);
+  } else if (f === 'week') {
+    const i = filters.weeks.indexOf(+v);
+    if (i === -1) filters.weeks.push(+v); else filters.weeks.splice(i, 1);
+  }
+  renderAll();
+}
+
+function toggleFavoritesFilter() {
+  filters.favOnly = !filters.favOnly;
+  document.getElementById('favToggle').classList.toggle('active', filters.favOnly);
+  document.getElementById('favToggle').textContent = filters.favOnly ? '♥ Showing favorites' : '♡ Show favorites only';
+  renderAll();
+}
+
+function clearFilters() {
+  filters = { themes: [], dayTypes: [], ages: [], weeks: [], search: '', favOnly: false };
+  document.querySelectorAll('.chip.active, .age-chip.active, .week-chip.active').forEach(el => el.classList.remove('active'));
+  document.getElementById('searchInput').value = '';
+  document.getElementById('favToggle').classList.remove('active');
+  document.getElementById('favToggle').textContent = '♡ Show favorites only';
+  renderAll();
+}
+
+function getFilteredCamps() {
+  let camps = campsData.camps;
+  const s = filters.search.toLowerCase();
+  if (s) camps = camps.filter(c => c.name.toLowerCase().includes(s));
+  if (filters.favOnly) camps = camps.filter(c => isHearted(c.name));
+  if (filters.themes.length) camps = camps.filter(c => filters.themes.some(t => c.themes.includes(t)));
+  if (filters.dayTypes.length) camps = camps.filter(c => filters.dayTypes.some(t => c.dayType.includes(t)));
+  if (filters.ages.length) camps = camps.filter(c => filters.ages.some(a => c.ages.includes(a)));
+  if (filters.weeks.length) camps = camps.filter(c => filters.weeks.some(w => c.weeks.includes(w)));
+  return camps;
+}
+
+function renderAll() {
+  renderCamps();
+  renderTracker();
+}
+
+function renderCamps() {
+  const grid = document.getElementById('campsGrid');
+  let camps = getFilteredCamps();
+  const sort = document.getElementById('sortSelect').value;
+  if (sort === 'name') camps.sort((a,b) => a.name.localeCompare(b.name));
+  else if (sort === 'cost') camps.sort((a,b) => a.name.localeCompare(b.name));
+  else if (sort === 'hearted') camps.sort((a,b) => (isHearted(b.name)?1:0) - (isHearted(a.name)?1:0));
+
+  const total = campsData.camps.length;
+  document.getElementById('resultsCount').innerHTML = `${camps.length} <span>of ${total} camps</span>`;
+  document.getElementById('headerCount').textContent = `${hearts.length} saved`;
+
+  if (!camps.length) {
+    grid.innerHTML = `<div class="no-results"><span class="no-results-emoji">🔍</span><h3>No camps found</h3><p>Try removing some filters</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = camps.map(camp => {
+    const hearted = isHearted(camp.name);
+    const primaryTheme = camp.themes[0] || 'general';
+    const themeClass = camp.themes.length > 1 ? 'multi-theme' : `theme-${(primaryTheme||'general').toLowerCase()}`;
+
+    const themeTags = camp.themes.map(t =>
+      `<span class="theme-tag ${t.toLowerCase()}">${t}</span>`
+    ).join('') + camp.dayType.map(t => `<span class="type-tag">${t}</span>`).join('');
+
+    const weekDots = campsData.weeks.map((w, i) => {
+      const inCamp = camp.weeks.includes(i);
+      if (!inCamp) return '';
+      const matched = filters.weeks.length > 0 && filters.weeks.includes(i);
+      return `<span class="week-dot${matched ? ' matched' : ''}">${w}</span>`;
+    }).join('');
+
+    const ageDots = camp.ages.map(i =>
+      `<span class="age-dot">${AGE_LABELS[i]}</span>`
+    ).join('');
+
+    const websiteBtn = camp.website ?
+      `<a href="${camp.website}" target="_blank" class="website-link">Website ↗</a>` :
+      `<span style="font-size:11px;color:var(--muted)">No website</span>`;
+
+    return `<div class="camp-card ${themeClass} ${hearted ? 'hearted' : ''}">
+      <div class="card-top">
+        <div class="camp-name">${camp.name}</div>
+        <button class="heart-btn ${hearted ? 'hearted' : ''}" onclick="toggleHeart('${camp.name.replace(/'/g,"\\'")}')">
+          ${hearted ? '♥' : '♡'}
+        </button>
+      </div>
+      <div class="theme-tags">${themeTags}</div>
+      ${camp.times ? `<div class="meta-item" style="margin-bottom:6px"><span class="meta-icon">🕐</span>${camp.times}</div>` : ''}
+      ${camp.agesText ? `<div class="meta-item" style="margin-bottom:8px"><span class="meta-icon">👶</span>${camp.agesText}</div>` : ''}
+      <div class="week-dots">${weekDots || '<span style="font-size:11px;color:var(--muted)">Weeks TBD</span>'}</div>
+      <div class="ages-bar">${ageDots}</div>
+      <div class="card-footer">
+        <div class="cost-badge">${camp.cost || '—'}</div>
+        ${websiteBtn}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderTracker() {
+  const grid = document.getElementById('trackerGrid');
+  const weeks = campsData.weeks;
+  const filtered = getFilteredCamps();
+
+  // Count per week
+  const heartedPerWeek = weeks.map((_, wi) =>
+    campsData.camps.filter(c => isHearted(c.name) && c.weeks.includes(wi)).length
+  );
+  const totalPerWeek = weeks.map((_, wi) =>
+    campsData.camps.filter(c => c.weeks.includes(wi)).length
+  );
+  const filteredPerWeek = weeks.map((_, wi) =>
+    filtered.filter(c => c.weeks.includes(wi)).length
+  );
+
+  const hasFilters = filters.themes.length || filters.dayTypes.length || filters.ages.length || filters.weeks.length || filters.search || filters.favOnly;
+
+  grid.innerHTML = `
+    <div class="tracker-row">
+      <div class="tracker-cell header-cell row-label"></div>
+      ${weeks.map(w => `<div class="tracker-cell header-cell">${w}</div>`).join('')}
+    </div>
+    <div class="tracker-row">
+      <div class="tracker-cell row-label">♥ Saved</div>
+      ${heartedPerWeek.map(n => `<div class="tracker-cell hearted-cell ${n>0?'has-camps':''}">${n||'–'}</div>`).join('')}
+    </div>
+    <div class="tracker-row">
+      <div class="tracker-cell row-label">All camps</div>
+      ${totalPerWeek.map(n => `<div class="tracker-cell total-cell">${n}</div>`).join('')}
+    </div>
+    ${hasFilters ? `<div class="tracker-row">
+      <div class="tracker-cell row-label" style="color:#FFE680">Filtered</div>
+      ${filteredPerWeek.map(n => `<div class="tracker-cell filtered-cell ${n>0?'active':''}">${n||'–'}</div>`).join('')}
+    </div>` : ''}
+  `;
+}
+
+function buildAgeGrid() {
+  const grid = document.getElementById('ageGrid');
+  grid.innerHTML = AGE_LABELS.map((label, i) =>
+    `<div class="age-chip" data-filter="age" data-value="${i}" onclick="toggleFilter(this)">${label}</div>`
+  ).join('');
+}
+
+function buildWeekChips() {
+  const wrap = document.getElementById('weekChips');
+  wrap.innerHTML = campsData.weeks.map((w, i) =>
+    `<div class="week-chip" data-filter="week" data-value="${i}" onclick="toggleFilter(this)">${w}</div>`
+  ).join('');
+}
+
+// Parse a CSV string into rows, handling quoted fields with commas
+function parseCSV(text) {
+  const rows = [];
+  const lines = text.split('\n');
+  for (const line of lines) {
+    if (!line.trim()) continue;
+    const row = [];
+    let inQ = false, cur = '';
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') { inQ = !inQ; }
+      else if (ch === ',' && !inQ) { row.push(cur.trim()); cur = ''; }
+      else { cur += ch; }
+    }
+    row.push(cur.trim());
+    rows.push(row);
+  }
+  return rows;
+}
+
+// Convert CSV rows into campsData format
+function csvToCampsData(rows) {
+  // Row 0: "Total camps per week" header — skip
+  // Row 1: actual headers — week dates in cols 2-12, then metadata cols
+  // Rows 2+: camp data
+
+  const headerRow = rows[1] || [];
+
+  // Extract week labels from cols 2-12 (they'll be date strings in CSV)
+  // Fall back to FALLBACK week labels if CSV dates are empty/weird
+  const weekLabels = [];
+  for (let i = 2; i <= 12; i++) {
+    const v = headerRow[i] ? headerRow[i].replace(/"/g, '').trim() : '';
+    // CSV dates often come as "6/2/2025" — convert to "Jun 2"
+    if (v && v.match(/\d+\/\d+\/\d+/)) {
+      const d = new Date(v);
+      if (!isNaN(d)) {
+        weekLabels.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+      } else { weekLabels.push(v); }
+    } else if (v) {
+      weekLabels.push(v);
+    } else {
+      weekLabels.push(FALLBACK.weeks[i - 2] || `Week ${i-1}`);
+    }
+  }
+
+  const camps = [];
+  for (let ri = 2; ri < rows.length; ri++) {
+    const row = rows[ri];
+    const name = (row[1] || '').replace(/"/g, '').trim();
+    if (!name) continue;
+
+    // Weeks: cols 2-12, any non-empty value = X
+    const weeks = [];
+    for (let wi = 0; wi <= 10; wi++) {
+      const v = (row[wi + 2] || '').trim().toLowerCase();
+      if (v && v !== '' && v !== 'false') weeks.push(wi);
+    }
+
+    // Day type: cols 13, 14, 15
+    const dayType = [];
+    if ((row[13] || '').trim()) dayType.push('Full');
+    if ((row[14] || '').trim()) dayType.push('Half');
+    if ((row[15] || '').trim()) dayType.push('Part');
+
+    // Themes: cols 16-20
+    const themes = [];
+    if ((row[16] || '').trim()) themes.push('General');
+    if ((row[17] || '').trim()) themes.push('Nature');
+    if ((row[18] || '').trim()) themes.push('Arts');
+    if ((row[19] || '').trim()) themes.push('Sport');
+    if ((row[20] || '').trim()) themes.push('Science');
+
+    // Cost, times, agesText: cols 21, 22, 23
+    const cost = (row[21] || '').replace(/"/g, '').trim();
+    const times = (row[22] || '').replace(/"/g, '').trim();
+    const agesText = (row[23] || '').replace(/"/g, '').trim();
+
+    // Age cols: 24-35
+    const ages = [];
+    for (let ai = 0; ai <= 11; ai++) {
+      const v = (row[ai + 24] || '').trim().toLowerCase();
+      if (v && v !== '' && v !== 'false') ages.push(ai);
+    }
+
+    // Website: col 36 — strip HYPERLINK formula if present
+    let website = (row[36] || '').replace(/"/g, '').trim();
+    const hm = website.match(/https?:\/\/[^\s,\)]+/);
+    if (hm) website = hm[0];
+
+    camps.push({ name, weeks, dayType, themes, ages, cost, times, agesText, website });
+  }
+
+  return { weeks: weekLabels, camps };
+}
+
+// Try fetching and parsing from Google Sheets
+async function tryLoadFromSheets() {
+  try {
+    const res = await fetch(GOOGLE_CSV);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const text = await res.text();
+    const rows = parseCSV(text);
+    console.log('[CSV] total rows:', rows.length);
+    console.log('[CSV] row 0:', JSON.stringify(rows[0]));
+    console.log('[CSV] row 1:', JSON.stringify(rows[1]));
+    console.log('[CSV] row 2:', JSON.stringify(rows[2]));
+    console.log('[CSV] last row:', JSON.stringify(rows[rows.length-1]));
+    if (rows.length < 3) throw new Error('too few rows');
+
+    const parsed = csvToCampsData(rows);
+    console.log('[CSV] parsed camps:', parsed.camps.length);
+    console.log('[CSV] last camp:', JSON.stringify(parsed.camps[parsed.camps.length-1]));
+    if (parsed.camps.length < 5) throw new Error('too few camps parsed');
+
+    campsData = parsed;
+    buildWeekChips();
+    renderAll();
+
+    document.getElementById('dataSourceLabel').textContent = 'Live from Google Sheets - ' + parsed.camps.length + ' camps';
+    document.getElementById('statusDot').style.background = '#4ade80';
+  } catch(e) {
+    console.warn('[CSV] load failed:', e.message);
+    document.getElementById('dataSourceLabel').textContent = 'Local data (2025) - ' + campsData.camps.length + ' camps';
+    document.getElementById('statusDot').style.background = '#f59e0b';
+  }
+}
+
+// Search
+document.getElementById('searchInput').addEventListener('input', e => {
+  filters.search = e.target.value;
+  renderAll();
+});
+
+// Init
+buildAgeGrid();
+buildWeekChips();
+renderAll();
+tryLoadFromSheets();
+</script>
+</body>
+</html>
