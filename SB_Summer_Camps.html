@@ -78,15 +78,15 @@
 
   /* WEEK TRACKER */
   .week-tracker {
-    background: #2E6FA8;
+    background: #DBEAFE;
     padding: 16px 32px 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.15);
+    border-bottom: 2px solid #BFDBFE;
   }
   .tracker-label {
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    color: rgba(255,255,255,0.9);
+    color: #1E3A5F;
     padding-bottom: 10px;
     font-weight: 600;
   }
@@ -99,17 +99,18 @@
     display: contents;
   }
   .tracker-cell {
-    background: rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.5);
     border-radius: 4px;
     padding: 6px 4px;
     text-align: center;
     font-size: 11px;
+    color: #1E3A5F;
     transition: background 0.2s;
   }
   .tracker-cell.header-cell {
     background: transparent;
     font-size: 10px;
-    color: #fff;
+    color: #1E3A5F;
     font-weight: 600;
     letter-spacing: 0.5px;
   }
@@ -117,7 +118,7 @@
     background: transparent;
     text-align: left;
     padding-left: 0;
-    color: rgba(255,255,255,0.8);
+    color: #1E3A5F;
     font-size: 10px;
     font-weight: 600;
     text-transform: uppercase;
@@ -126,22 +127,298 @@
     align-items: center;
   }
   .tracker-cell.hearted-cell {
-    background: rgba(255,255,255,0.15);
-    color: #FFE680;
+    background: rgba(255,255,255,0.6);
+    color: #B45309;
     font-weight: 700;
   }
-  .tracker-cell.hearted-cell.has-camps { background: rgba(255,255,255,0.25); }
+  .tracker-cell.hearted-cell.has-camps { background: #FEF3C7; }
   .tracker-cell.total-cell {
-    background: rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.4);
+    color: #1E3A5F;
     font-weight: 500;
   }
   .tracker-cell.filtered-cell {
-    background: rgba(255,255,255,0.12);
-    color: #FFE680;
+    background: rgba(255,255,255,0.5);
+    color: #B45309;
     font-weight: 600;
   }
-  .tracker-cell.filtered-cell.active { background: rgba(255,255,255,0.28); }
+  .tracker-cell.filtered-cell.active { background: #FEF3C7; }
+  .tracker-cell.plan-cell {
+    background: rgba(45,122,79,0.1);
+    color: #1E3A5F;
+    font-size: 9px;
+    font-weight: 600;
+    line-height: 1.3;
+    padding: 4px 3px;
+    white-space: normal;
+    word-break: break-word;
+    min-height: 28px;
+    cursor: default;
+  }
+  .tracker-cell.plan-cell.has-plan { background: rgba(45,122,79,0.2); }
+  .plan-camp-name {
+    display: block;
+    font-size: 8px;
+    line-height: 1.2;
+    opacity: 0.95;
+    margin-bottom: 1px;
+  }
+  .plan-camp-name:last-child { margin-bottom: 0; }
+  .plan-cell-empty {
+    position: relative;
+    cursor: pointer;
+  }
+  .plan-cell-empty:hover { background: rgba(45,122,79,0.08); }
+  .vacation-hint {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1E3A5F;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    z-index: 10;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .vacation-hint::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: #1E3A5F;
+  }
+  .plan-cell-empty:hover .vacation-hint { display: block; }
+  .tracker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+  }
+  .share-plan-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 14px;
+    border-radius: 6px;
+    border: 1.5px solid rgba(30,58,95,0.3);
+    background: rgba(255,255,255,0.4);
+    color: #1E3A5F;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .share-plan-btn:hover { background: rgba(255,255,255,0.7); border-color: #1E3A5F; }
+  .share-plan-btn svg { vertical-align: middle; }
+  .share-warning-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 9998;
+    justify-content: center;
+    align-items: center;
+  }
+  .share-warning-overlay.active { display: flex; }
+  .share-warning-box {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px;
+    max-width: 440px;
+    width: 90%;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+  }
+  .share-warning-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+  .share-warning-title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .share-warning-text {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .share-warning-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  .share-email-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    margin-bottom: 16px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .share-email-input:focus { border-color: var(--sky); }
+  .share-choice { display: flex; gap: 8px; margin-bottom: 14px; }
+  .share-choice-btn {
+    flex: 1; padding: 8px 10px; border-radius: 8px;
+    border: 1.5px solid var(--border); background: #fff;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; text-align: center;
+    transition: all 0.15s; color: var(--ink);
+  }
+  .share-choice-btn:hover { border-color: var(--sky); }
+  .share-choice-btn.active { border-color: var(--sky); background: #EFF6FF; color: var(--sky); }
+
+  /* SITE FOOTER */
+  .site-footer {
+    background: #1E3A5F;
+    color: rgba(255,255,255,0.7);
+    padding: 20px 32px;
+    font-size: 11px;
+    line-height: 1.6;
+    text-align: center;
+  }
+  .site-footer a { color: rgba(255,255,255,0.9); text-decoration: underline; }
+  .footer-links { display: flex; gap: 16px; justify-content: center; margin-bottom: 8px; }
+  .footer-link-btn {
+    background: none; border: none; color: rgba(255,255,255,0.85);
+    font-size: 11px; font-weight: 600; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; text-decoration: underline;
+    padding: 0;
+  }
+  .footer-link-btn:hover { color: #fff; }
+
+  /* PRIVACY POPUP */
+  .privacy-overlay {
+    display: none; position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.45); z-index: 9998;
+    justify-content: center; align-items: center;
+  }
+  .privacy-overlay.active { display: flex; }
+  .privacy-box {
+    background: #fff; border-radius: 16px; padding: 28px;
+    max-width: 480px; width: 90%;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+    max-height: 80vh; overflow-y: auto;
+  }
+  .privacy-title {
+    font-family: 'Fraunces', serif;
+    font-size: 20px; font-weight: 700;
+    color: var(--ink); margin-bottom: 12px;
+  }
+  .privacy-section {
+    margin-bottom: 14px;
+  }
+  .privacy-section-title {
+    font-size: 13px; font-weight: 700;
+    color: var(--ink); margin-bottom: 4px;
+  }
+  .privacy-section p {
+    font-size: 12px; color: var(--muted);
+    line-height: 1.6; margin: 0;
+  }
+  .privacy-close-btn {
+    display: block; margin: 16px auto 0;
+    padding: 8px 24px; border-radius: 8px;
+    border: none; background: var(--sky);
+    color: #fff; font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+  }
+  .privacy-close-btn:hover { background: #3a7bc8; }
+
+  /* REVIEW MY PLAN MODAL */
+  .review-overlay {
+    display: none; position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.45); z-index: 9998;
+    justify-content: center; align-items: flex-start;
+    padding: 40px 20px;
+    overflow-y: auto;
+  }
+  .review-overlay.active { display: flex; }
+  .review-box {
+    background: #fff; border-radius: 16px; padding: 28px;
+    max-width: 700px; width: 100%;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+  }
+  .review-header {
+    display: flex; align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .review-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px; font-weight: 700; color: var(--ink);
+  }
+  .review-close {
+    background: none; border: none;
+    font-size: 24px; color: var(--muted);
+    cursor: pointer; padding: 4px 8px;
+  }
+  .review-close:hover { color: var(--ink); }
+  .review-child-section { margin-bottom: 24px; }
+  .review-child-name {
+    font-family: 'Fraunces', serif;
+    font-size: 16px; font-weight: 700;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .review-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px;
+  }
+  .review-table th {
+    text-align: left; padding: 8px 12px;
+    background: #DBEAFE; color: #1E3A5F;
+    border: 1px solid #BFDBFE;
+    font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .review-table td {
+    padding: 7px 12px;
+    border: 1px solid #E5DDD3;
+    vertical-align: top;
+  }
+  .review-table tr.has-camp { background: #f0fdf4; }
+  .review-table tr.vacation-row { background: #FEF3C7; }
+  .review-table .week-cell {
+    font-weight: 600; white-space: nowrap;
+    width: 70px; color: #1E3A5F;
+  }
+  .review-table .camp-cell { color: var(--ink); }
+  .review-table .camp-cell a {
+    color: var(--sky); text-decoration: none;
+  }
+  .review-table .camp-cell a:hover { text-decoration: underline; }
+  .review-camp-meta {
+    font-size: 11px; color: var(--muted); margin-top: 2px;
+  }
+  .review-directions {
+    display: inline-flex; align-items: center; gap: 3px;
+    font-size: 11px; color: var(--sky);
+    text-decoration: none; margin-top: 4px;
+  }
+  .review-directions:hover { text-decoration: underline; }
+  .review-empty-cell { color: var(--muted); font-style: italic; }
+  .review-actions {
+    display: flex; gap: 10px;
+    justify-content: flex-end; margin-top: 16px;
+    padding-top: 16px; border-top: 1px solid var(--border);
+  }
 
   /* LAYOUT */
   .app-body {
@@ -465,8 +742,14 @@
     color: var(--muted);
     border: 1px solid var(--border);
     letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
   }
+  .week-dot:hover { border-color: var(--grass); background: #f0fdf4; }
   .week-dot.matched { background: #EFF6FF; color: var(--sky); border-color: #BFDBFE; }
+  .week-dot.planned { background: var(--grass); color: #fff; border-color: var(--grass); }
+  .week-dot.planned:hover { background: #1f5e3a; }
 
   .ages-bar {
     display: flex;
@@ -527,6 +810,593 @@
   }
 
   .loading { text-align: center; padding: 60px; color: var(--muted); font-family: 'Fraunces', serif; font-size: 18px; }
+
+  /* +PLAN BUTTON ON CARDS */
+  .plan-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid var(--grass);
+    background: #fff;
+    color: var(--grass);
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+    margin-left: 6px;
+    flex-shrink: 0;
+  }
+  .plan-btn:hover { background: var(--grass); color: #fff; }
+  .plan-btn.active { background: var(--grass); color: #fff; border-color: var(--grass); }
+
+  .week-plan-hint {
+    display: none;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: var(--grass);
+    font-weight: 600;
+    margin-bottom: 6px;
+    animation: hintPulse 1.5s ease-in-out 3;
+  }
+  .week-plan-hint.visible { display: flex; }
+  @keyframes hintPulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  .week-plan-hint .hint-arrow {
+    font-size: 14px;
+    animation: hintBounce 0.8s ease-in-out infinite;
+  }
+  @keyframes hintBounce {
+    0%,100% { transform: translateX(0); }
+    50% { transform: translateX(4px); }
+  }
+
+  /* WELCOME HERO */
+  .welcome-hero {
+    background: linear-gradient(135deg, #EFF6FF 0%, #FBF6EF 50%, #f0fdf4 100%);
+    border-bottom: 2px solid var(--border);
+    padding: 28px 32px 24px;
+    position: relative;
+  }
+  .welcome-hero.dismissed { display: none; }
+  .welcome-dismiss {
+    position: absolute;
+    top: 12px; right: 16px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+  .welcome-dismiss:hover { background: rgba(0,0,0,0.05); color: var(--ink); }
+  .welcome-heading {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .welcome-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    max-width: 600px;
+    line-height: 1.5;
+  }
+  .welcome-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .welcome-step {
+    background: #fff;
+    border-radius: 10px;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    transition: all 0.15s;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .welcome-step:hover { border-color: #ccc; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+  .step-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    line-height: 1;
+    margin-top: 2px;
+  }
+  .step-content { flex: 1; }
+  .step-num {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .step-title {
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .step-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .welcome-footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .tour-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid var(--sky);
+    background: var(--sky);
+    color: #fff;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .tour-btn:hover { background: #3a7bc8; }
+  .welcome-show-btn {
+    display: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    color: var(--muted);
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+    margin: 0 32px 0;
+  }
+  .welcome-show-btn.visible { display: inline-block; }
+  .welcome-show-btn:hover { border-color: var(--sky); color: var(--sky); }
+
+  /* GUIDED TOUR OVERLAY */
+  .tour-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 9999;
+    transition: opacity 0.3s;
+  }
+  .tour-overlay.active { display: block; }
+  .tour-spotlight {
+    position: absolute;
+    border-radius: 8px;
+    box-shadow: 0 0 0 9999px rgba(0,0,0,0.55);
+    background: transparent;
+    transition: all 0.4s ease;
+    z-index: 10000;
+  }
+  .tour-tooltip {
+    position: absolute;
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 320px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+    z-index: 10001;
+    transition: all 0.4s ease;
+  }
+  .tour-tooltip-title {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .tour-tooltip-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+  .tour-tooltip-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .tour-tooltip-step {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .tour-next-btn {
+    padding: 7px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: var(--sky);
+    color: #fff;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .tour-next-btn:hover { background: #3a7bc8; }
+  .tour-skip-btn {
+    background: none;
+    border: none;
+    font-size: 12px;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 4px 8px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .tour-skip-btn:hover { color: var(--ink); }
+
+  /* OR/AND TOGGLE */
+  .filter-logic-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    padding: 4px 0;
+  }
+  .logic-label {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .logic-switch {
+    display: flex;
+    background: var(--sand);
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .logic-opt {
+    padding: 3px 10px;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .logic-opt.active { background: var(--sky); color: #fff; }
+  .logic-opt:hover:not(.active) { background: rgba(0,0,0,0.04); }
+  .logic-help-btn {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin-left: 2px;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .logic-help-btn:hover { border-color: var(--sky); color: var(--sky); }
+
+  /* MULTI-CHILD SYSTEM */
+  .children-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 16px;
+    padding: 10px 12px;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+  }
+  .children-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-right: 4px;
+  }
+  .child-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .child-tag.selected { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); }
+  .child-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .child-remove {
+    font-size: 12px;
+    margin-left: 2px;
+    opacity: 0.5;
+    cursor: pointer;
+  }
+  .child-remove:hover { opacity: 1; }
+  .add-child-btn {
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px dashed var(--border);
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .add-child-btn:hover { border-color: var(--sky); color: var(--sky); }
+
+  .child-picker {
+    display: none;
+    position: absolute;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    z-index: 50;
+    min-width: 120px;
+  }
+  .child-picker.visible { display: block; }
+  .child-picker-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .child-picker-item:hover { background: var(--sand); }
+
+  .week-dot .child-dots {
+    display: inline-flex;
+    gap: 2px;
+    margin-left: 3px;
+  }
+  .week-dot .mini-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .tracker-child-row .tracker-cell {
+    font-size: 8px;
+    padding: 3px;
+  }
+  .tracker-add-child-btn {
+    background: none; border: 1px dashed rgba(30,58,95,0.3);
+    border-radius: 4px; padding: 2px 8px;
+    font-size: 9px; font-weight: 600;
+    color: #1E3A5F; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    opacity: 0.6; transition: opacity 0.15s;
+  }
+  .tracker-add-child-btn:hover { opacity: 1; }
+
+  /* PLAN MODE CHOICE IN HERO */
+  .plan-choice {
+    display: contents;
+  }
+  .plan-choice-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+    text-align: left;
+  }
+  .plan-choice-btn:hover { border-color: var(--sky); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+  .plan-choice-btn.selected { border-color: var(--sky); background: #EFF6FF; }
+  .plan-choice-icon { font-size: 22px; flex-shrink: 0; }
+  .plan-choice-text { flex: 1; }
+  .plan-choice-title { font-weight: 700; font-size: 13px; color: var(--ink); }
+  .plan-choice-desc { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+
+  /* KIDS MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 9998;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal-box {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+    position: relative;
+  }
+  .modal-title {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .modal-subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  .modal-kid-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .modal-kid-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .modal-kid-color {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .modal-kid-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .modal-kid-input:focus { border-color: var(--sky); }
+  .modal-kid-remove {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 2px 6px;
+  }
+  .modal-kid-remove:hover { color: var(--coral); }
+  .modal-add-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border: 1.5px dashed var(--border);
+    border-radius: 8px;
+    background: transparent;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+    margin-bottom: 20px;
+  }
+  .modal-add-btn:hover { border-color: var(--sky); color: var(--sky); }
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  .modal-cancel-btn {
+    padding: 8px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .modal-save-btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 8px;
+    background: var(--sky);
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s;
+  }
+  .modal-save-btn:hover { background: #3a7bc8; }
+
+  /* PLAN CHILD PICKER (on +Plan click) */
+  .plan-child-picker {
+    display: none;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 6px;
+    padding: 6px 8px;
+    background: #f0fdf4;
+    border: 1.5px solid var(--grass);
+    border-radius: 8px;
+    animation: fadeIn 0.15s ease;
+  }
+  .plan-child-picker.visible { display: flex; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+  .plan-child-pick {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 14px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    transition: all 0.12s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .plan-child-pick:hover { border-color: var(--grass); background: #f0fdf4; }
+  .plan-child-pick.active-child { border-color: var(--grass); background: var(--grass); color: #fff; }
+  .plan-child-pick .child-dot { width: 7px; height: 7px; }
+  .picker-label {
+    font-size: 10px;
+    color: var(--grass);
+    font-weight: 700;
+    margin-right: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .welcome-steps { grid-template-columns: 1fr; }
+    .welcome-hero { padding: 20px; }
+    .tour-tooltip { max-width: 260px; padding: 16px; }
+    .children-bar { flex-direction: column; align-items: flex-start; }
+    .welcome-footer { flex-direction: column; align-items: flex-start; }
+  }
 </style>
 </head>
 <body>
@@ -543,8 +1413,112 @@
 </header>
 
 <div class="week-tracker">
-  <div class="tracker-label">Week-by-Week Overview</div>
+  <div class="tracker-header">
+    <div class="tracker-label" style="padding-bottom:0">Week-by-Week Overview</div>
+    <div style="display:flex;gap:8px;align-items:center;" id="trackerActions">
+      <button class="share-plan-btn" id="reviewPlanBtn" onclick="openReview()" style="display:none">📋 Review my plan</button>
+      <button class="share-plan-btn" id="sharePlanBtn" onclick="openShareDialog()" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg> Share</button>
+    </div>
+  </div>
   <div class="tracker-grid" id="trackerGrid"></div>
+</div>
+
+<div class="welcome-hero" id="welcomeHero">
+  <button class="welcome-dismiss" onclick="dismissWelcome()" title="Dismiss">&times;</button>
+  <div class="welcome-heading">Plan Your Summer!</div>
+  <div class="welcome-sub">Browse camps in the South Bend &amp; Michiana area, save your favorites, and build a week-by-week plan for your kids.</div>
+  <div class="welcome-steps">
+    <div class="welcome-step">
+      <span class="step-icon">🔍</span>
+      <div class="step-content">
+        <div class="step-num">Step 1</div>
+        <div class="step-title">Search &amp; Filter</div>
+        <div class="step-desc">Use the sidebar to narrow camps by age, theme, day type, or specific weeks. Type a name in the search bar to jump right to a camp.</div>
+      </div>
+    </div>
+    <div class="welcome-step">
+      <span class="step-icon">♥</span>
+      <div class="step-content">
+        <div class="step-num">Step 2</div>
+        <div class="step-title">Heart Your Favorites</div>
+        <div class="step-desc">Click the heart on any camp card to save it. Use "Show favorites only" to see just your shortlist. Your favorites are saved between visits.</div>
+      </div>
+    </div>
+    <div class="welcome-step">
+      <span class="step-icon">📋</span>
+      <div class="step-content">
+        <div class="step-num">Step 3</div>
+        <div class="step-title">Build Your Plan</div>
+        <div class="step-desc">Click the green <strong>+ Plan</strong> button on a camp card, then click the weeks you want. Your plan shows up in the calendar grid at the top of the page.</div>
+      </div>
+    </div>
+  </div>
+  <div class="welcome-footer">
+    <div class="plan-choice" id="planChoice">
+      <button class="plan-choice-btn" onclick="choosePlanMode('family')">
+        <span class="plan-choice-icon">👨‍👩‍👧‍👦</span>
+        <div class="plan-choice-text">
+          <div class="plan-choice-title">One family plan</div>
+          <div class="plan-choice-desc">Single schedule</div>
+        </div>
+      </button>
+      <button class="plan-choice-btn" onclick="choosePlanMode('multi')">
+        <span class="plan-choice-icon">🧒🧒</span>
+        <div class="plan-choice-text">
+          <div class="plan-choice-title">Per-kid plans</div>
+          <div class="plan-choice-desc">Color-coded schedules</div>
+        </div>
+      </button>
+    </div>
+    <button class="tour-btn" onclick="startTour()">Take a quick tour</button>
+    <span style="font-size:12px;color:var(--muted)">~30 sec</span>
+  </div>
+</div>
+<button class="welcome-show-btn" id="welcomeShowBtn" onclick="showWelcome()">? Show tips</button>
+
+<div class="modal-overlay" id="kidsModal">
+  <div class="modal-box">
+    <div class="modal-title">Who are we planning for?</div>
+    <div class="modal-subtitle">Add your children's names so each gets their own color-coded plan.</div>
+    <div class="modal-kid-list" id="modalKidList"></div>
+    <button class="modal-add-btn" onclick="addKidRow()">+ Add another child</button>
+    <div class="modal-actions">
+      <button class="modal-cancel-btn" onclick="closeKidsModal()">Cancel</button>
+      <button class="modal-save-btn" onclick="saveKidsFromModal()">Save &amp; Start Planning</button>
+    </div>
+  </div>
+</div>
+
+<div class="share-warning-overlay" id="shareOverlay">
+  <div class="share-warning-box">
+    <div class="share-warning-icon">🔒</div>
+    <div class="share-warning-title">Share safely</div>
+    <div class="share-warning-text">Sharing your schedule may include your children's names and weekly locations. For your children's safety, please only share this with people you trust, such as a co-parent, family member, or close friend.</div>
+    <div class="share-choice" id="shareChoiceDiv">
+      <button class="share-choice-btn active" data-mode="plan" onclick="setShareMode('plan',this)">📋 Share my plan</button>
+      <button class="share-choice-btn" data-mode="favorites" onclick="setShareMode('favorites',this)">♥ Share favorites</button>
+    </div>
+    <input class="share-email-input" id="shareEmail" type="email" placeholder="Recipient's email address">
+    <div class="share-warning-actions">
+      <button class="modal-cancel-btn" onclick="closeShareDialog()">Cancel</button>
+      <button class="modal-save-btn" onclick="sendShareEmail()">Copy &amp; open email</button>
+    </div>
+  </div>
+</div>
+
+<div class="tour-overlay" id="tourOverlay" onclick="endTour()">
+  <div class="tour-spotlight" id="tourSpotlight"></div>
+  <div class="tour-tooltip" id="tourTooltip" onclick="event.stopPropagation()">
+    <div class="tour-tooltip-title" id="tourTitle"></div>
+    <div class="tour-tooltip-desc" id="tourDesc"></div>
+    <div class="tour-tooltip-actions">
+      <span class="tour-tooltip-step" id="tourStep"></span>
+      <div>
+        <button class="tour-skip-btn" onclick="endTour()">Skip</button>
+        <button class="tour-next-btn" id="tourNextBtn" onclick="nextTourStep()">Next</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="app-body">
@@ -554,7 +1528,14 @@
       <input class="search-input" type="text" placeholder="Search camps…" id="searchInput">
     </div>
 
+    <div class="children-bar" id="childrenBar">
+      <span class="children-label">Planning for:</span>
+      <div id="childTags"></div>
+      <button class="add-child-btn" onclick="promptAddChild()">+ Add child</button>
+    </div>
+
     <button class="favorites-toggle" id="favToggle" onclick="toggleFavoritesFilter()">♡ Show favorites only</button>
+    <button class="favorites-toggle" id="planToggle" onclick="togglePlanFilter()" style="margin-bottom:16px">📋 Show planned only</button>
 
     <div class="filter-section">
       <div class="filter-title">Theme</div>
@@ -578,6 +1559,14 @@
 
     <div class="filter-section">
       <div class="filter-title">Age / Grade</div>
+      <div class="filter-logic-toggle">
+        <span class="logic-label">Show results matching:</span>
+        <div class="logic-switch">
+          <button class="logic-opt active" data-logic="age" data-mode="or" onclick="setFilterLogic('age','or',this)" title="Show camps that accept any of the selected ages">Any</button>
+          <button class="logic-opt" data-logic="age" data-mode="and" onclick="setFilterLogic('age','and',this)" title="Only show camps that accept all of the selected ages">All</button>
+        </div>
+        <button class="logic-help-btn" onclick="showAgeHelp()" title="What does this mean?">?</button>
+      </div>
       <div class="age-grid" id="ageGrid"></div>
     </div>
 
@@ -604,6 +1593,54 @@
   </main>
 </div>
 
+<footer class="site-footer">
+  <div class="footer-links">
+    <button class="footer-link-btn" onclick="openPrivacyPopup()">🔒 Privacy &amp; Your Data</button>
+  </div>
+  <p><strong>Disclaimer:</strong> Camp details (dates, costs, ages, times) are collected from publicly available sources and may not reflect the most current information. Please verify all details directly with each camp provider before registering. We are not responsible for any discrepancies or changes made by camp organizers.</p>
+</footer>
+
+<div class="review-overlay" id="reviewOverlay" onclick="if(event.target===this)closeReview()">
+  <div class="review-box">
+    <div class="review-header">
+      <div class="review-title">Review My Plan</div>
+      <button class="review-close" onclick="closeReview()">&times;</button>
+    </div>
+    <div id="reviewContent"></div>
+    <div class="review-actions">
+      <button class="modal-cancel-btn" onclick="closeReview()">Close</button>
+      <button class="modal-save-btn" onclick="openShareDialog()">Share this plan</button>
+    </div>
+  </div>
+</div>
+
+<div class="privacy-overlay" id="privacyOverlay">
+  <div class="privacy-box">
+    <div class="privacy-title">🔒 Privacy &amp; Your Data</div>
+    <div class="privacy-section">
+      <div class="privacy-section-title">Your data stays on your device</div>
+      <p>All of your favorites, plans, and children's names are stored locally in your browser using localStorage. We do not collect, transmit, or store any of your personal information on any server. Your data never leaves your device.</p>
+    </div>
+    <div class="privacy-section">
+      <div class="privacy-section-title">No accounts, no tracking</div>
+      <p>This site does not require an account, does not use cookies for tracking, and does not collect analytics about your usage. There is no login, no sign-up, and no way for us to see what you've saved.</p>
+    </div>
+    <div class="privacy-section">
+      <div class="privacy-section-title">Data does not sync across devices</div>
+      <p>Because your data is stored only in your browser, it will not appear if you visit this site on a different device, browser, or in a private/incognito window. If you clear your browser data, your favorites and plans will be erased.</p>
+    </div>
+    <div class="privacy-section">
+      <div class="privacy-section-title">Sharing your plan</div>
+      <p>If you choose to share your plan via email, the share feature opens your own email app with a pre-filled message. We never see or handle the email — it goes directly from your device to the recipient you choose. Please only share your children's schedule information with people you trust.</p>
+    </div>
+    <div class="privacy-section">
+      <div class="privacy-section-title">Camp information disclaimer</div>
+      <p>Camp details are gathered from publicly available sources and are updated periodically. We are not affiliated with any camp provider. Always verify dates, costs, and availability directly with each camp before enrolling your child.</p>
+    </div>
+    <button class="privacy-close-btn" onclick="closePrivacyPopup()">Got it</button>
+  </div>
+</div>
+
 <script>
 const GOOGLE_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vToDTtPRso-6Z8NiN1VAwfm0mZ4Gyf0gQfYAA2ZsJ8ViSMoyQ7fvQft1f5C3WB3FtCgrRU8-e3Lv3tc/pub?output=csv';
 
@@ -614,7 +1651,43 @@ const FALLBACK = {"weeks":["Jun 2","Jun 9","Jun 16","Jun 23","Jun 30","Jul 7","J
 
 let campsData = FALLBACK;
 let hearts = JSON.parse(localStorage.getItem('sbCampHearts') || '[]');
-let filters = { themes: [], dayTypes: [], ages: [], weeks: [], search: '', favOnly: false };
+// plans: { "campName": [weekIndex, ...] }
+let plans = JSON.parse(localStorage.getItem('sbCampPlans') || '{}');
+let filters = { themes: [], dayTypes: [], ages: [], weeks: [], search: '', favOnly: false, planOnly: false, ageLogic: 'or' };
+
+// Multi-child system
+const CHILD_COLORS = ['#4A90D9','#E85D4A','#8B6FBE','#2D7A4F','#F5A623','#D946A8'];
+let children = JSON.parse(localStorage.getItem('sbCampChildren') || '[]');
+// plans now: { "campName": { "childId": [weekIndex, ...], ... } }
+// Migrate old format if needed
+if (typeof Object.values(plans)[0] === 'object' && Array.isArray(Object.values(plans)[0])) {
+  // Old format: { "campName": [weeks] } — migrate to new format under "default" child
+  const oldPlans = {...plans};
+  plans = {};
+  for (const [name, weeks] of Object.entries(oldPlans)) {
+    if (Array.isArray(weeks)) {
+      plans[name] = { '_default': weeks };
+    } else {
+      plans[name] = weeks;
+    }
+  }
+  savePlans();
+}
+let activeChildId = children.length > 0 ? children[0].id : '_default';
+
+function saveChildren() { localStorage.setItem('sbCampChildren', JSON.stringify(children)); }
+function getChildById(id) { return children.find(c => c.id === id); }
+function getChildColor(id) {
+  const child = getChildById(id);
+  if (child) return child.color;
+  if (id === '_default') return CHILD_COLORS[0];
+  return '#999';
+}
+function getChildName(id) {
+  const child = getChildById(id);
+  if (child) return child.name;
+  return 'My Plan';
+}
 
 function saveHearts() { localStorage.setItem('sbCampHearts', JSON.stringify(hearts)); }
 function toggleHeart(name) {
@@ -624,6 +1697,94 @@ function toggleHeart(name) {
   renderAll();
 }
 function isHearted(name) { return hearts.includes(name); }
+
+function savePlans() { localStorage.setItem('sbCampPlans', JSON.stringify(plans)); }
+function togglePlan(name, weekIdx) {
+  if (!plans[name]) plans[name] = {};
+  if (!plans[name][activeChildId]) plans[name][activeChildId] = [];
+  const arr = plans[name][activeChildId];
+  const i = arr.indexOf(weekIdx);
+  if (i === -1) arr.push(weekIdx);
+  else arr.splice(i, 1);
+  if (arr.length === 0) delete plans[name][activeChildId];
+  if (Object.keys(plans[name]).length === 0) delete plans[name];
+  savePlans();
+  renderAll();
+}
+function isPlanned(name, weekIdx) {
+  if (!plans[name]) return false;
+  for (const childWeeks of Object.values(plans[name])) {
+    if (childWeeks.includes(weekIdx)) return true;
+  }
+  return false;
+}
+function isPlannedByChild(name, weekIdx, childId) {
+  return plans[name] && plans[name][childId] && plans[name][childId].includes(weekIdx);
+}
+function getPlannedChildren(name, weekIdx) {
+  if (!plans[name]) return [];
+  const result = [];
+  for (const [childId, weeks] of Object.entries(plans[name])) {
+    if (weeks.includes(weekIdx)) result.push(childId);
+  }
+  return result;
+}
+function hasPlanForAnyChild(name) {
+  if (!plans[name]) return false;
+  return Object.values(plans[name]).some(weeks => weeks.length > 0);
+}
+
+function setFilterLogic(field, mode, el) {
+  if (field === 'age') filters.ageLogic = mode;
+  // Update toggle UI
+  el.parentElement.querySelectorAll('.logic-opt').forEach(btn => btn.classList.remove('active'));
+  el.classList.add('active');
+  renderAll();
+}
+
+// Child management
+function promptAddChild() {
+  // Open the kids modal instead of a basic prompt
+  openKidsModal();
+}
+function removeChild(id) {
+  if (!confirm('Remove this child and their plans?')) return;
+  children = children.filter(c => c.id !== id);
+  // Remove their plans
+  for (const campPlans of Object.values(plans)) {
+    delete campPlans[id];
+  }
+  // Clean empty plan entries
+  for (const [name, campPlans] of Object.entries(plans)) {
+    if (Object.keys(campPlans).length === 0) delete plans[name];
+  }
+  if (activeChildId === id) {
+    activeChildId = children.length > 0 ? children[0].id : '_default';
+  }
+  saveChildren();
+  savePlans();
+  renderChildrenBar();
+  renderAll();
+}
+function selectChild(id) {
+  activeChildId = id;
+  renderChildrenBar();
+  renderAll();
+}
+function renderChildrenBar() {
+  const container = document.getElementById('childTags');
+  if (children.length === 0) {
+    container.innerHTML = '<span style="font-size:11px;color:var(--muted)">No children added yet</span>';
+    return;
+  }
+  container.innerHTML = children.map(c =>
+    `<span class="child-tag ${c.id === activeChildId ? 'selected' : ''}" style="background:${c.color}20;color:${c.color}" onclick="selectChild('${c.id}')">
+      <span class="child-dot" style="background:${c.color}"></span>
+      ${c.name}
+      <span class="child-remove" onclick="event.stopPropagation();removeChild('${c.id}')">&times;</span>
+    </span>`
+  ).join('');
+}
 
 function toggleFilter(el) {
   el.classList.toggle('active');
@@ -650,13 +1811,24 @@ function toggleFavoritesFilter() {
   document.getElementById('favToggle').textContent = filters.favOnly ? '♥ Showing favorites' : '♡ Show favorites only';
   renderAll();
 }
+function togglePlanFilter() {
+  filters.planOnly = !filters.planOnly;
+  document.getElementById('planToggle').classList.toggle('active', filters.planOnly);
+  document.getElementById('planToggle').textContent = filters.planOnly ? '📋 Showing planned' : '📋 Show planned only';
+  renderAll();
+}
 
 function clearFilters() {
-  filters = { themes: [], dayTypes: [], ages: [], weeks: [], search: '', favOnly: false };
+  filters = { themes: [], dayTypes: [], ages: [], weeks: [], search: '', favOnly: false, planOnly: false, ageLogic: 'or' };
+  document.querySelectorAll('.logic-opt').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === 'or');
+  });
   document.querySelectorAll('.chip.active, .age-chip.active, .week-chip.active').forEach(el => el.classList.remove('active'));
   document.getElementById('searchInput').value = '';
   document.getElementById('favToggle').classList.remove('active');
   document.getElementById('favToggle').textContent = '♡ Show favorites only';
+  document.getElementById('planToggle').classList.remove('active');
+  document.getElementById('planToggle').textContent = '📋 Show planned only';
   renderAll();
 }
 
@@ -665,9 +1837,19 @@ function getFilteredCamps() {
   const s = filters.search.toLowerCase();
   if (s) camps = camps.filter(c => c.name.toLowerCase().includes(s));
   if (filters.favOnly) camps = camps.filter(c => isHearted(c.name));
+  if (filters.planOnly) camps = camps.filter(c => hasPlanForAnyChild(c.name));
+  // Cross-category: AND logic (must match theme AND dayType AND age AND week)
   if (filters.themes.length) camps = camps.filter(c => filters.themes.some(t => c.themes.includes(t)));
   if (filters.dayTypes.length) camps = camps.filter(c => filters.dayTypes.some(t => c.dayType.includes(t)));
-  if (filters.ages.length) camps = camps.filter(c => filters.ages.some(a => c.ages.includes(a)));
+  if (filters.ages.length) {
+    if (filters.ageLogic === 'and') {
+      // Camp must accept ALL selected ages
+      camps = camps.filter(c => filters.ages.every(a => c.ages.includes(a)));
+    } else {
+      // Camp must accept ANY selected age
+      camps = camps.filter(c => filters.ages.some(a => c.ages.includes(a)));
+    }
+  }
   if (filters.weeks.length) camps = camps.filter(c => filters.weeks.some(w => c.weeks.includes(w)));
   return camps;
 }
@@ -687,7 +1869,10 @@ function renderCamps() {
 
   const total = campsData.camps.length;
   document.getElementById('resultsCount').innerHTML = `${camps.length} <span>of ${total} camps</span>`;
-  document.getElementById('headerCount').textContent = `${hearts.length} saved`;
+  const planCount = Object.keys(plans).filter(name => hasPlanForAnyChild(name)).length;
+  document.getElementById('headerCount').textContent = `${hearts.length} saved` + (planCount ? ` · ${planCount} planned` : '');
+  document.getElementById('sharePlanBtn').style.display = (hearts.length > 0 || planCount > 0) ? '' : 'none';
+  document.getElementById('reviewPlanBtn').style.display = planCount > 0 ? '' : 'none';
 
   if (!camps.length) {
     grid.innerHTML = `<div class="no-results"><span class="no-results-emoji">🔍</span><h3>No camps found</h3><p>Try removing some filters</p></div>`;
@@ -703,11 +1888,17 @@ function renderCamps() {
       `<span class="theme-tag ${t.toLowerCase()}">${t}</span>`
     ).join('') + camp.dayType.map(t => `<span class="type-tag">${t}</span>`).join('');
 
+    const escapedName = camp.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
     const weekDots = campsData.weeks.map((w, i) => {
       const inCamp = camp.weeks.includes(i);
       if (!inCamp) return '';
       const matched = filters.weeks.length > 0 && filters.weeks.includes(i);
-      return `<span class="week-dot${matched ? ' matched' : ''}">${w}</span>`;
+      const plannedKids = getPlannedChildren(camp.name, i);
+      const isPlannedByActive = isPlannedByChild(camp.name, i, activeChildId);
+      const anyPlanned = plannedKids.length > 0;
+      const childDots = plannedKids.length > 0 ? `<span class="child-dots">${plannedKids.map(cid => `<span class="mini-dot" style="background:${getChildColor(cid)}"></span>`).join('')}</span>` : '';
+      const title = isPlannedByActive ? `Remove ${getChildName(activeChildId)} from ${w}` : `Add ${getChildName(activeChildId)} to ${w}`;
+      return `<span class="week-dot${matched ? ' matched' : ''}${anyPlanned ? ' planned' : ''}" onclick="event.stopPropagation();togglePlan('${escapedName}',${i})" title="${title}">${anyPlanned ? '✓' : ''}${w}${childDots}</span>`;
     }).join('');
 
     const ageDots = camp.ages.map(i =>
@@ -718,9 +1909,15 @@ function renderCamps() {
       `<a href="${camp.website}" target="_blank" class="website-link">Website ↗</a>` :
       `<span style="font-size:11px;color:var(--muted)">No website</span>`;
 
-    return `<div class="camp-card ${themeClass} ${hearted ? 'hearted' : ''}">
+    const hasPlan = hasPlanForAnyChild(camp.name);
+    const cardId = 'card-' + camp.name.replace(/[^a-zA-Z0-9]/g, '_');
+
+    return `<div class="camp-card ${themeClass} ${hearted ? 'hearted' : ''}" id="${cardId}">
       <div class="card-top">
         <div class="camp-name">${camp.name}</div>
+        <button class="plan-btn ${hasPlan ? 'active' : ''}" onclick="activatePlanMode('${escapedName}','${cardId}')" title="Add this camp to your weekly plan">
+          ${hasPlan ? '✓ Planned' : '+ Plan'}
+        </button>
         <button class="heart-btn ${hearted ? 'hearted' : ''}" onclick="toggleHeart('${camp.name.replace(/'/g,"\\'")}')">
           ${hearted ? '♥' : '♡'}
         </button>
@@ -728,6 +1925,11 @@ function renderCamps() {
       <div class="theme-tags">${themeTags}</div>
       ${camp.times ? `<div class="meta-item" style="margin-bottom:6px"><span class="meta-icon">🕐</span>${camp.times}</div>` : ''}
       ${camp.agesText ? `<div class="meta-item" style="margin-bottom:8px"><span class="meta-icon">👶</span>${camp.agesText}</div>` : ''}
+      <div class="week-plan-hint" id="hint-${cardId}"><span class="hint-arrow">👇</span> Click a week below to add it to your plan</div>
+      ${children.length > 1 ? `<div class="plan-child-picker" id="picker-${cardId}">
+        <span class="picker-label">Planning for:</span>
+        ${children.map(c => `<button class="plan-child-pick ${c.id === activeChildId ? 'active-child' : ''}" data-child-id="${c.id}" onclick="event.stopPropagation();selectChildForPlan('${c.id}','${cardId}')"><span class="child-dot" style="background:${c.color}"></span>${c.name}</button>`).join('')}
+      </div>` : ''}
       <div class="week-dots">${weekDots || '<span style="font-size:11px;color:var(--muted)">Weeks TBD</span>'}</div>
       <div class="ages-bar">${ageDots}</div>
       <div class="card-footer">
@@ -754,9 +1956,42 @@ function renderTracker() {
     filtered.filter(c => c.weeks.includes(wi)).length
   );
 
-  const hasFilters = filters.themes.length || filters.dayTypes.length || filters.ages.length || filters.weeks.length || filters.search || filters.favOnly;
+  const hasFilters = filters.themes.length || filters.dayTypes.length || filters.ages.length || filters.weeks.length || filters.search || filters.favOnly || filters.planOnly;
+
+  // Helper to abbreviate camp name for the tracker
+  function abbrevName(name) {
+    return name
+      .replace(/^(Kroc Specialty Camp|Potawatomi Zoo|Camp Invention)\s*[-:]\s*/i, '')
+      .replace(/\s*\(.*?\)\s*/g, '')
+      .substring(0, 18)
+      + (name.replace(/^(Kroc Specialty Camp|Potawatomi Zoo|Camp Invention)\s*[-:]\s*/i, '').replace(/\s*\(.*?\)\s*/g, '').length > 18 ? '…' : '');
+  }
+
+  // Build per-child plan rows — always show at least one row so users can add vacations
+  const childIds = children.length > 0 ? children.map(c => c.id) : ['_default'];
+  const planRows = childIds.map(childId => {
+    const perWeek = weeks.map((_, wi) => {
+      const campNames = [];
+      for (const [name, childPlans] of Object.entries(plans)) {
+        if (childPlans[childId] && childPlans[childId].includes(wi)) campNames.push(name);
+      }
+      return campNames;
+    });
+    return { childId, perWeek };
+  });
 
   grid.innerHTML = `
+    ${planRows.map(row => `<div class="tracker-row tracker-child-row">
+      <div class="tracker-cell row-label" style="color:${getChildColor(row.childId)}"><span class="child-dot" style="background:${getChildColor(row.childId)};width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:4px"></span>${getChildName(row.childId)}</div>
+      ${row.perWeek.map((names, wi) => names.length
+        ? `<div class="tracker-cell plan-cell has-plan" style="border-left:2px solid ${getChildColor(row.childId)}">${names.map(n => `<span class="plan-camp-name">${abbrevName(n)}</span>`).join('')}</div>`
+        : `<div class="tracker-cell plan-cell plan-cell-empty" onclick="addVacation('${row.childId}',${wi})"><span class="vacation-hint">+ Vacation</span>–</div>`
+      ).join('')}
+    </div>`).join('')}
+    ${children.length > 0 ? `<div class="tracker-row">
+      <div class="tracker-cell row-label"><button class="tracker-add-child-btn" onclick="promptAddChild()" title="Add another child">+ child</button></div>
+      ${weeks.map(() => `<div class="tracker-cell" style="background:transparent"></div>`).join('')}
+    </div>` : ''}
     <div class="tracker-row">
       <div class="tracker-cell header-cell row-label"></div>
       ${weeks.map(w => `<div class="tracker-cell header-cell">${w}</div>`).join('')}
@@ -770,7 +2005,7 @@ function renderTracker() {
       ${totalPerWeek.map(n => `<div class="tracker-cell total-cell">${n}</div>`).join('')}
     </div>
     ${hasFilters ? `<div class="tracker-row">
-      <div class="tracker-cell row-label" style="color:#FFE680">Filtered</div>
+      <div class="tracker-cell row-label" style="color:#B45309">Filtered</div>
       ${filteredPerWeek.map(n => `<div class="tracker-cell filtered-cell ${n>0?'active':''}">${n||'–'}</div>`).join('')}
     </div>` : ''}
   `;
@@ -913,9 +2148,592 @@ async function tryLoadFromSheets() {
     document.getElementById('statusDot').style.background = '#4ade80';
   } catch(e) {
     console.warn('[CSV] load failed:', e.message);
-    document.getElementById('dataSourceLabel').textContent = 'Local data (2025) - ' + campsData.camps.length + ' camps';
+    document.getElementById('dataSourceLabel').textContent = 'Local data (2026) - ' + campsData.camps.length + ' camps';
     document.getElementById('statusDot').style.background = '#f59e0b';
   }
+}
+
+// +Plan button logic
+function activatePlanMode(campName, cardId) {
+  const hint = document.getElementById('hint-' + cardId);
+  const picker = document.getElementById('picker-' + cardId);
+
+  // If multiple children, show/hide child picker
+  if (children.length > 1) {
+    // Hide all other pickers and hints
+    document.querySelectorAll('.plan-child-picker.visible').forEach(p => p.classList.remove('visible'));
+    document.querySelectorAll('.week-plan-hint.visible').forEach(h => h.classList.remove('visible'));
+
+    if (picker) {
+      if (picker.classList.contains('visible')) {
+        picker.classList.remove('visible');
+        if (hint) hint.classList.remove('visible');
+      } else {
+        picker.classList.add('visible');
+        if (hint) { void hint.offsetWidth; hint.classList.add('visible'); }
+        const card = document.getElementById(cardId);
+        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+    return;
+  }
+
+  // Single child or family mode — just show week hint
+  if (hint) {
+    if (hint.classList.contains('visible')) {
+      hint.classList.remove('visible');
+    } else {
+      document.querySelectorAll('.week-plan-hint.visible').forEach(h => h.classList.remove('visible'));
+      hint.classList.remove('visible');
+      void hint.offsetWidth;
+      hint.classList.add('visible');
+      const card = document.getElementById(cardId);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+}
+
+function selectChildForPlan(childId, cardId) {
+  activeChildId = childId;
+  // Update picker UI
+  const picker = document.getElementById('picker-' + cardId);
+  if (picker) {
+    picker.querySelectorAll('.plan-child-pick').forEach(btn => {
+      btn.classList.toggle('active-child', btn.dataset.childId === childId);
+    });
+  }
+  // Also update sidebar children bar
+  renderChildrenBar();
+}
+
+// Add Family Vacation to a week
+const VACATION_LABEL = 'Family Vacation';
+function addVacation(childId, weekIdx) {
+  if (!plans[VACATION_LABEL]) plans[VACATION_LABEL] = {};
+  if (!plans[VACATION_LABEL][childId]) plans[VACATION_LABEL][childId] = [];
+  const arr = plans[VACATION_LABEL][childId];
+  if (!arr.includes(weekIdx)) arr.push(weekIdx);
+  savePlans();
+  renderAll();
+}
+
+// Review My Plan
+function openReview() {
+  const container = document.getElementById('reviewContent');
+  const weeks = campsData.weeks;
+  const childIds = children.length > 0 ? children.map(c => c.id) : ['_default'];
+  let html = '';
+
+  for (const childId of childIds) {
+    const name = getChildName(childId);
+    const color = getChildColor(childId);
+
+    if (children.length > 0) {
+      html += '<div class="review-child-section">';
+      html += '<div class="review-child-name" style="color:' + color + '"><span class="child-dot" style="background:' + color + ';width:8px;height:8px;border-radius:50%;display:inline-block"></span>' + name + '\'s Schedule</div>';
+    } else {
+      html += '<div class="review-child-section">';
+    }
+
+    html += '<table class="review-table"><tr><th>Week</th><th>Camp</th></tr>';
+
+    for (let wi = 0; wi < weeks.length; wi++) {
+      const campEntries = [];
+      for (const [campName, childPlans] of Object.entries(plans)) {
+        if (childPlans[childId] && childPlans[childId].includes(wi)) {
+          // Find camp data for details
+          const campData = campsData.camps.find(c => c.name === campName);
+          campEntries.push({ name: campName, data: campData });
+        }
+      }
+
+      const isVacation = campEntries.some(e => e.name === 'Family Vacation');
+      const rowClass = isVacation ? 'vacation-row' : (campEntries.length > 0 ? 'has-camp' : '');
+
+      html += '<tr class="' + rowClass + '">';
+      html += '<td class="week-cell">' + weeks[wi] + '</td>';
+
+      if (campEntries.length === 0) {
+        html += '<td class="review-empty-cell"></td>';
+      } else {
+        const cellParts = campEntries.map(entry => {
+          let part = '';
+          if (entry.name === 'Family Vacation') {
+            part = '<strong>Family Vacation</strong>';
+          } else if (entry.data && entry.data.website) {
+            part = '<a href="' + entry.data.website + '" target="_blank">' + entry.name + '</a>';
+          } else {
+            part = '<strong>' + entry.name + '</strong>';
+          }
+          // Add meta info
+          if (entry.data) {
+            const meta = [];
+            if (entry.data.times) meta.push(entry.data.times);
+            if (entry.data.cost) meta.push(entry.data.cost);
+            if (meta.length) part += '<div class="review-camp-meta">' + meta.join(' · ') + '</div>';
+          }
+          return part;
+        });
+        html += '<td class="camp-cell">' + cellParts.join('<br>') + '</td>';
+      }
+      html += '</tr>';
+    }
+
+    html += '</table>';
+
+    // Check for same-week different camps across children for Google Maps links
+    // (only relevant if multiple camps in same week for same child)
+    html += '</div>';
+  }
+
+  // If multiple children have different camps in the same week, show directions link
+  if (children.length > 1) {
+    let directionsHtml = '';
+    for (let wi = 0; wi < weeks.length; wi++) {
+      const campsByChild = {};
+      for (const childId of childIds) {
+        const camps = [];
+        for (const [campName, childPlans] of Object.entries(plans)) {
+          if (childPlans[childId] && childPlans[childId].includes(wi) && campName !== 'Family Vacation') {
+            camps.push(campName);
+          }
+        }
+        if (camps.length) campsByChild[childId] = camps;
+      }
+      const uniqueCamps = [...new Set(Object.values(campsByChild).flat())];
+      if (uniqueCamps.length > 1) {
+        const mapsUrl = 'https://www.google.com/maps/dir/' + uniqueCamps.map(n => encodeURIComponent(n + ' South Bend IN')).join('/');
+        directionsHtml += '<a class="review-directions" href="' + mapsUrl + '" target="_blank">🚗 ' + weeks[wi] + ': Get directions between ' + uniqueCamps.join(' & ') + '</a><br>';
+      }
+    }
+    if (directionsHtml) {
+      html += '<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">';
+      html += '<div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Driving directions</div>';
+      html += directionsHtml + '</div>';
+    }
+  }
+
+  container.innerHTML = html;
+  document.getElementById('reviewOverlay').classList.add('active');
+}
+
+function closeReview() {
+  document.getElementById('reviewOverlay').classList.remove('active');
+}
+
+// Privacy popup
+function openPrivacyPopup() {
+  document.getElementById('privacyOverlay').classList.add('active');
+}
+function closePrivacyPopup() {
+  document.getElementById('privacyOverlay').classList.remove('active');
+}
+
+// Share plan
+let shareMode = 'plan'; // 'plan' or 'favorites'
+function openShareDialog() {
+  const hasAnyPlan = Object.keys(plans).length > 0;
+  const hasAnyFav = hearts.length > 0;
+  if (!hasAnyPlan && !hasAnyFav) {
+    alert('You haven\'t saved any favorites or made a plan yet! Heart some camps or use "+ Plan" to build your schedule first.');
+    return;
+  }
+  shareMode = hasAnyPlan ? 'plan' : 'favorites';
+  document.getElementById('shareEmail').value = '';
+  document.getElementById('shareEmail').style.borderColor = '';
+  updateShareChoiceUI();
+  // Show/hide choice buttons based on what's available
+  const choiceDiv = document.getElementById('shareChoiceDiv');
+  choiceDiv.style.display = (hasAnyPlan && hasAnyFav) ? 'flex' : 'none';
+  document.getElementById('shareOverlay').classList.add('active');
+}
+
+function setShareMode(mode, el) {
+  shareMode = mode;
+  updateShareChoiceUI();
+}
+
+function updateShareChoiceUI() {
+  document.querySelectorAll('.share-choice-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.mode === shareMode);
+  });
+}
+
+function closeShareDialog() {
+  document.getElementById('shareOverlay').classList.remove('active');
+}
+
+const PLANNER_URL = 'https://emcd124.github.io/sb-summer-camps/SB_Summer_Camps.html';
+
+function buildFavoritesHTML() {
+  const favCamps = campsData.camps.filter(c => hearts.includes(c.name));
+  let html = '<h2 style="font-family:sans-serif;color:#1E3A5F;margin-bottom:16px;">Our Favorite Summer Camps</h2>';
+  html += '<table style="border-collapse:collapse;font-family:sans-serif;font-size:14px;width:100%;max-width:600px;">';
+  html += '<tr style="background:#DBEAFE;"><th style="text-align:left;padding:8px 12px;border:1px solid #BFDBFE;">Camp</th><th style="text-align:left;padding:8px 12px;border:1px solid #BFDBFE;">Ages</th><th style="text-align:left;padding:8px 12px;border:1px solid #BFDBFE;">Cost</th><th style="text-align:left;padding:8px 12px;border:1px solid #BFDBFE;">Weeks</th></tr>';
+  for (const camp of favCamps) {
+    const campWeeks = camp.weeks.map(wi => campsData.weeks[wi]).join(', ');
+    const nameCell = camp.website ? '<a href="' + camp.website + '" style="color:#4A90D9;">' + camp.name + '</a>' : camp.name;
+    html += '<tr><td style="padding:6px 12px;border:1px solid #E5DDD3;">' + nameCell + '</td>';
+    html += '<td style="padding:6px 12px;border:1px solid #E5DDD3;">' + (camp.agesText || '') + '</td>';
+    html += '<td style="padding:6px 12px;border:1px solid #E5DDD3;">' + (camp.cost || '') + '</td>';
+    html += '<td style="padding:6px 12px;border:1px solid #E5DDD3;font-size:12px;">' + campWeeks + '</td></tr>';
+  }
+  html += '</table>';
+  html += '<p style="font-family:sans-serif;font-size:13px;color:#6B7280;margin-top:16px;">Browse all camps at <a href="' + PLANNER_URL + '" style="color:#4A90D9;">South Bend Summer Camps Planner</a></p>';
+  return html;
+}
+
+function buildPlanHTML() {
+  const weeks = campsData.weeks;
+  const childIds = children.length > 0 ? children.map(c => c.id) : ['_default'];
+  let html = '<h2 style="font-family:sans-serif;color:#1E3A5F;margin-bottom:16px;">Summer Camp Plan</h2>';
+
+  for (const childId of childIds) {
+    const name = getChildName(childId);
+    const color = getChildColor(childId);
+    if (children.length > 0) {
+      html += '<h3 style="font-family:sans-serif;color:' + color + ';margin:16px 0 8px;">' + name + '\'s Schedule</h3>';
+    }
+    html += '<table style="border-collapse:collapse;font-family:sans-serif;font-size:14px;width:100%;max-width:500px;margin-bottom:16px;">';
+    html += '<tr style="background:#DBEAFE;"><th style="text-align:left;padding:8px 12px;border:1px solid #BFDBFE;width:80px;">Week</th><th style="text-align:left;padding:8px 12px;border:1px solid #BFDBFE;">Camp</th></tr>';
+
+    for (let wi = 0; wi < weeks.length; wi++) {
+      const campNames = [];
+      for (const [campName, childPlans] of Object.entries(plans)) {
+        if (childPlans[childId] && childPlans[childId].includes(wi)) campNames.push(campName);
+      }
+      const bg = campNames.length > 0 ? '#f0fdf4' : '#fff';
+      html += '<tr style="background:' + bg + ';"><td style="padding:6px 12px;border:1px solid #E5DDD3;font-weight:600;white-space:nowrap;">' + weeks[wi] + '</td>';
+      html += '<td style="padding:6px 12px;border:1px solid #E5DDD3;">' + (campNames.length ? campNames.join(', ') : '') + '</td></tr>';
+    }
+    html += '</table>';
+  }
+
+  html += '<p style="font-family:sans-serif;font-size:13px;color:#6B7280;margin-top:8px;">Browse all camps at <a href="' + PLANNER_URL + '" style="color:#4A90D9;">South Bend Summer Camps Planner</a></p>';
+  return html;
+}
+
+async function sendShareEmail() {
+  const email = document.getElementById('shareEmail').value.trim();
+  if (!email || !email.includes('@')) {
+    document.getElementById('shareEmail').style.borderColor = '#E85D4A';
+    document.getElementById('shareEmail').focus();
+    return;
+  }
+  const isFav = shareMode === 'favorites';
+  const htmlContent = isFav ? buildFavoritesHTML() : buildPlanHTML();
+
+  // Copy formatted HTML to clipboard
+  try {
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    await navigator.clipboard.write([
+      new ClipboardItem({ 'text/html': blob })
+    ]);
+  } catch (e) {
+    // Fallback: copy plain text
+    const temp = document.createElement('div');
+    temp.innerHTML = htmlContent;
+    await navigator.clipboard.writeText(temp.textContent);
+  }
+
+  // Open mailto with just the recipient and subject (user will paste the body)
+  const subject = encodeURIComponent(isFav ? 'Our Favorite Summer Camps' : 'Our Summer Camp Plan');
+  window.open('mailto:' + encodeURIComponent(email) + '?subject=' + subject);
+  closeShareDialog();
+
+  // Show confirmation
+  const btn = document.querySelector('.modal-save-btn');
+  const origText = btn.textContent;
+  btn.textContent = 'Copied! Paste into your email';
+  btn.style.background = '#2D7A4F';
+  setTimeout(() => { btn.textContent = origText; btn.style.background = ''; }, 3000);
+}
+
+// Welcome hero dismiss/show
+function dismissWelcome() {
+  document.getElementById('welcomeHero').classList.add('dismissed');
+  document.getElementById('welcomeShowBtn').classList.add('visible');
+  localStorage.setItem('sbWelcomeDismissed', 'true');
+}
+function showWelcome() {
+  document.getElementById('welcomeHero').classList.remove('dismissed');
+  document.getElementById('welcomeShowBtn').classList.remove('visible');
+  localStorage.removeItem('sbWelcomeDismissed');
+}
+// Restore welcome state
+if (localStorage.getItem('sbWelcomeDismissed') === 'true') {
+  document.getElementById('welcomeHero').classList.add('dismissed');
+  document.getElementById('welcomeShowBtn').classList.add('visible');
+}
+
+// If children already set up, hide plan choice buttons
+if (children.length > 0 || localStorage.getItem('sbPlanMode')) {
+  const pc = document.getElementById('planChoice');
+  if (pc) pc.style.display = 'none';
+}
+
+// Plan mode choice
+function choosePlanMode(mode) {
+  localStorage.setItem('sbPlanMode', mode);
+  // Highlight selected button
+  document.querySelectorAll('.plan-choice-btn').forEach(b => b.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+
+  if (mode === 'family') {
+    // Single family plan — use _default child, hide children bar, dismiss hero
+    children = [];
+    activeChildId = '_default';
+    saveChildren();
+    document.getElementById('planChoice').style.display = 'none';
+    document.getElementById('childrenBar').style.display = 'none';
+    dismissWelcome();
+    renderAll();
+  } else {
+    // Multi-child — open the kids name modal
+    openKidsModal();
+  }
+}
+
+function openKidsModal() {
+  const modal = document.getElementById('kidsModal');
+  const list = document.getElementById('modalKidList');
+  // Pre-populate with existing children or start with 2 blank rows
+  if (children.length > 0) {
+    list.innerHTML = children.map((c, i) => buildKidRowHTML(i, c.name)).join('');
+  } else {
+    list.innerHTML = buildKidRowHTML(0, '') + buildKidRowHTML(1, '');
+  }
+  modal.classList.add('active');
+}
+
+function closeKidsModal() {
+  document.getElementById('kidsModal').classList.remove('active');
+}
+
+function buildKidRowHTML(index, name) {
+  const color = CHILD_COLORS[index % CHILD_COLORS.length];
+  return `<div class="modal-kid-row">
+    <span class="modal-kid-color" style="background:${color}"></span>
+    <input class="modal-kid-input" type="text" placeholder="Child's name" value="${name || ''}" maxlength="20">
+    <button class="modal-kid-remove" onclick="removeKidRow(this)" title="Remove">&times;</button>
+  </div>`;
+}
+
+function addKidRow() {
+  const list = document.getElementById('modalKidList');
+  const count = list.querySelectorAll('.modal-kid-row').length;
+  if (count >= 6) return; // max 6 children (matches CHILD_COLORS length)
+  list.insertAdjacentHTML('beforeend', buildKidRowHTML(count, ''));
+}
+
+function removeKidRow(btn) {
+  const list = document.getElementById('modalKidList');
+  if (list.querySelectorAll('.modal-kid-row').length <= 1) return; // keep at least 1
+  btn.closest('.modal-kid-row').remove();
+  // Re-color dots after removal
+  list.querySelectorAll('.modal-kid-row').forEach((row, i) => {
+    row.querySelector('.modal-kid-color').style.background = CHILD_COLORS[i % CHILD_COLORS.length];
+  });
+}
+
+function saveKidsFromModal() {
+  const inputs = document.querySelectorAll('#modalKidList .modal-kid-input');
+  const names = [];
+  inputs.forEach(inp => {
+    const n = inp.value.trim();
+    if (n) names.push(n);
+  });
+  if (names.length === 0) {
+    // If they cleared all names, treat as family mode
+    choosePlanMode('family');
+    closeKidsModal();
+    return;
+  }
+  // Build children array, preserving existing IDs if names match
+  const newChildren = names.map((name, i) => {
+    const existing = children.find(c => c.name === name);
+    return {
+      id: existing ? existing.id : 'child_' + Date.now() + '_' + i,
+      name: name,
+      color: CHILD_COLORS[i % CHILD_COLORS.length]
+    };
+  });
+  // Migrate plans: remove plan entries for children that no longer exist
+  const newIds = new Set(newChildren.map(c => c.id));
+  for (const campPlans of Object.values(plans)) {
+    for (const cid of Object.keys(campPlans)) {
+      if (cid !== '_default' && !newIds.has(cid)) {
+        delete campPlans[cid];
+      }
+    }
+  }
+  // If there were _default plans, assign them to the first child
+  if (newChildren.length > 0) {
+    for (const [campName, campPlans] of Object.entries(plans)) {
+      if (campPlans['_default'] && campPlans['_default'].length > 0) {
+        if (!campPlans[newChildren[0].id]) campPlans[newChildren[0].id] = [];
+        campPlans[newChildren[0].id] = [...new Set([...campPlans[newChildren[0].id], ...campPlans['_default']])];
+        delete campPlans['_default'];
+      }
+    }
+  }
+  // Clean empty entries
+  for (const [name, campPlans] of Object.entries(plans)) {
+    if (Object.keys(campPlans).length === 0) delete plans[name];
+  }
+
+  children = newChildren;
+  activeChildId = children[0].id;
+  saveChildren();
+  savePlans();
+
+  // Update UI
+  document.getElementById('childrenBar').style.display = '';
+  document.getElementById('planChoice').style.display = 'none';
+  closeKidsModal();
+  dismissWelcome();
+  renderChildrenBar();
+  renderAll();
+}
+
+// Guided tour
+let tourStep = 0;
+const tourSteps = [
+  {
+    target: () => document.querySelector('aside'),
+    title: 'Filter & Search',
+    desc: 'Use these filters to narrow camps by theme, day type, age, or week. The search bar at the top finds camps by name. Your favorites and plans are stored locally on your browser — we never collect your data. See the privacy link at the bottom for details.',
+    position: 'right'
+  },
+  {
+    target: () => document.querySelector('.filter-logic-toggle'),
+    title: 'Any vs All Ages',
+    desc: 'When you select multiple ages, "Any" shows camps that accept at least one of those ages. "All" only shows camps that accept every age you picked — great for finding a camp all your kids can attend together.',
+    position: 'right'
+  },
+  {
+    target: () => document.querySelector('.heart-btn'),
+    title: 'Save Favorites',
+    desc: 'Click the heart on any camp card to save it to your favorites. Your favorites persist between visits and show up in the tracker grid above.',
+    position: 'left'
+  },
+  {
+    target: () => document.querySelector('.plan-btn'),
+    title: 'Plan Your Weeks',
+    desc: 'Click the green "+ Plan" button on a camp card, then click the week buttons that appear below to add that camp to your weekly schedule.',
+    position: 'left'
+  },
+  {
+    target: () => document.getElementById('trackerGrid'),
+    title: 'Your Schedule',
+    desc: 'Your planned camps appear here with a row for each child. Want to know which weeks have the most options? You can see total camps by week, or click any filter to see how many camps matching that filter are offered each week. Tip: hover over any blank week and click to mark it as a family vacation!',
+    position: 'bottom'
+  }
+];
+
+let miniTourMode = false;
+function showAgeHelp() {
+  // Show a single-step mini tour focused on the age Any/All toggle
+  dismissWelcome();
+  const ageIdx = tourSteps.findIndex(s => s.title === 'Any vs All Ages');
+  if (ageIdx === -1) return;
+  miniTourMode = true;
+  tourStep = ageIdx;
+  document.getElementById('tourOverlay').classList.add('active');
+  showTourStep();
+  document.getElementById('tourNextBtn').textContent = 'Got it!';
+  document.getElementById('tourStep').textContent = '';
+}
+
+function startTour() {
+  dismissWelcome();
+  tourStep = 0;
+  document.getElementById('tourOverlay').classList.add('active');
+  showTourStep();
+}
+
+function endTour() {
+  document.getElementById('tourOverlay').classList.remove('active');
+  tourStep = 0;
+  miniTourMode = false;
+}
+
+function nextTourStep() {
+  if (miniTourMode) { endTour(); return; }
+  tourStep++;
+  if (tourStep >= tourSteps.length) {
+    endTour();
+    return;
+  }
+  showTourStep();
+}
+
+function showTourStep() {
+  const step = tourSteps[tourStep];
+  const target = step.target();
+  if (!target) { nextTourStep(); return; }
+
+  // Scroll the target into view — handle both page scroll and sidebar scroll
+  const sidebar = document.querySelector('aside');
+  if (sidebar && sidebar.contains(target)) {
+    // Scroll the sidebar so the target is visible within it
+    const sidebarRect = sidebar.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    const offsetInSidebar = targetRect.top - sidebarRect.top + sidebar.scrollTop;
+    sidebar.scrollTo({ top: offsetInSidebar - sidebarRect.height / 2 + targetRect.height / 2, behavior: 'smooth' });
+  }
+  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setTimeout(() => positionTourElements(step, target), 400);
+}
+
+function positionTourElements(step, target) {
+  const rect = target.getBoundingClientRect();
+  const spotlight = document.getElementById('tourSpotlight');
+  const tooltip = document.getElementById('tourTooltip');
+  const pad = 8;
+  const vh = window.innerHeight;
+  const vw = window.innerWidth;
+
+  // Position spotlight
+  spotlight.style.left = (rect.left - pad) + 'px';
+  spotlight.style.top = (rect.top - pad) + 'px';
+  spotlight.style.width = (rect.width + pad*2) + 'px';
+  spotlight.style.height = (rect.height + pad*2) + 'px';
+
+  // Set tooltip content
+  document.getElementById('tourTitle').textContent = step.title;
+  document.getElementById('tourDesc').textContent = step.desc;
+  if (!miniTourMode) {
+    document.getElementById('tourStep').textContent = `${tourStep + 1} of ${tourSteps.length}`;
+    document.getElementById('tourNextBtn').textContent = tourStep === tourSteps.length - 1 ? 'Done!' : 'Next';
+  }
+
+  // Calculate tooltip position
+  const tw = 320;
+  let tipLeft, tipTop;
+
+  if (step.position === 'right') {
+    tipLeft = rect.right + 20;
+    tipTop = rect.top;
+  } else if (step.position === 'left') {
+    tipLeft = Math.max(10, rect.left - tw - 20);
+    tipTop = rect.top;
+  } else if (step.position === 'bottom') {
+    tipLeft = rect.left;
+    tipTop = rect.bottom + 16;
+  }
+
+  // Clamp tooltip within viewport
+  tipLeft = Math.max(10, Math.min(tipLeft, vw - tw - 10));
+  // Estimate tooltip height (~160px) and clamp vertically
+  const estHeight = 180;
+  if (tipTop + estHeight > vh - 10) {
+    tipTop = Math.max(10, rect.top - estHeight - 16);
+  }
+  tipTop = Math.max(10, tipTop);
+
+  tooltip.style.left = tipLeft + 'px';
+  tooltip.style.top = tipTop + 'px';
 }
 
 // Search
@@ -927,6 +2745,14 @@ document.getElementById('searchInput').addEventListener('input', e => {
 // Init
 buildAgeGrid();
 buildWeekChips();
+renderChildrenBar();
+// Hide children bar if in family mode or no mode chosen yet
+if (children.length === 0) {
+  const planMode = localStorage.getItem('sbPlanMode');
+  if (!planMode || planMode === 'family') {
+    document.getElementById('childrenBar').style.display = 'none';
+  }
+}
 renderAll();
 tryLoadFromSheets();
 </script>
